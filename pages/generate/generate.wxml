@@ -1,0 +1,37 @@
+<view class="container">
+  <view class="card">
+    <view class="section-title">选择生成类型</view>
+    <view class="type-tabs">
+      <view class="type-tab {{type === 'barcode' ? 'active' : ''}}" bindtap="switchType" data-type="barcode">条形码</view>
+      <view class="type-tab {{type === 'qrcode' ? 'active' : ''}}" bindtap="switchType" data-type="qrcode">二维码</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">输入内容</view>
+    <textarea
+      class="content-input"
+      placeholder="请输入要生成的内容，如链接、文本、编号等"
+      value="{{content}}"
+      bindinput="onInput"
+      maxlength="500"
+    />
+    <view class="quick-tags">
+      <text wx:for="{{quickTags}}" wx:key="*this" class="tag" bindtap="fillTag" data-text="{{item}}">{{item}}</text>
+    </view>
+  </view>
+
+  <view class="btn-primary" bindtap="generate">生成{{type === 'barcode' ? '条形码' : '二维码'}}</view>
+
+  <view class="card preview-card" wx:if="{{generated}}">
+    <view class="section-title">预览</view>
+    <view class="preview-area">
+      <image wx:if="{{type === 'qrcode'}}" src="{{qrImage}}" mode="aspectFit" class="preview-img"/>
+      <view wx:else class="barcode-placeholder">
+        <view class="barcode-lines"></view>
+        <view class="barcode-text">{{content}}</view>
+      </view>
+    </view>
+    <view class="btn-secondary" bindtap="saveRecord">保存到生成记录</view>
+  </view>
+</view>
