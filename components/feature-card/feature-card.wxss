@@ -1,0 +1,37 @@
+.feature-card {
+  border-radius: 24rpx;
+  padding: 28rpx;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 160rpx;
+  box-sizing: border-box;
+  transition: transform 0.1s ease;
+}
+
+.feature-card:active {
+  transform: scale(0.98);
+}
+
+.feature-card-large {
+  min-height: 180rpx;
+}
+
+.feature-icon {
+  font-size: 48rpx;
+  margin-bottom: 12rpx;
+  opacity: 0.95;
+}
+
+.feature-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.feature-desc {
+  font-size: 24rpx;
+  opacity: 0.85;
+  margin-top: 8rpx;
+}
