@@ -1,0 +1,55 @@
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.record-row {
+  background: #F9FAFC;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.record-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.record-code {
+  font-size: 30rpx;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 8rpx;
+}
+
+.record-meta {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.record-actions {
+  display: flex;
+  align-items: center;
+}
+
+.record-type {
+  font-size: 22rpx;
+  color: #5B6CFF;
+  background: #EEF0FF;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  margin-right: 16rpx;
+}
+
+.delete-btn {
+  font-size: 24rpx;
+  color: #FF5B5B;
+  padding: 8rpx 16rpx;
+}
