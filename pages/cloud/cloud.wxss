@@ -1,0 +1,110 @@
+page {
+  background: #F5F7FA;
+}
+
+.tabs {
+  display: flex;
+  background: #fff;
+  margin: 20rpx 24rpx;
+  border-radius: 16rpx;
+  padding: 6rpx;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 18rpx 0;
+  border-radius: 12rpx;
+  font-size: 30rpx;
+  color: #666;
+}
+
+.tab.active {
+  background: #5B6CFF;
+  color: #fff;
+}
+
+.tab-panel {
+  padding: 0 24rpx 40rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.cloud-input {
+  width: 100%;
+  background: #F5F7FA;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  box-sizing: border-box;
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.tip {
+  font-size: 24rpx;
+  color: #888;
+  margin-bottom: 24rpx;
+  line-height: 1.5;
+}
+
+.sync-row {
+  display: flex;
+  gap: 20rpx;
+}
+
+.sync-row .btn-secondary {
+  flex: 1;
+}
+
+.status-text {
+  text-align: center;
+  font-size: 26rpx;
+  color: #999;
+  margin-top: 24rpx;
+}
+
+.status-text.ready {
+  color: #07C160;
+}
+
+.recycle-header {
+  margin-bottom: 16rpx;
+}
+
+.recycle-title {
+  font-size: 30rpx;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.recycle-time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.btn-secondary.small {
+  height: 64rpx;
+  line-height: 64rpx;
+  font-size: 26rpx;
+  width: 160rpx;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 200rpx;
+  color: #999;
+}
+
+.empty-state .icon {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+}
