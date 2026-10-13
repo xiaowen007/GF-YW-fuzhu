@@ -1,0 +1,67 @@
+<view class="page">
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-input-wrap">
+      <view class="search-icon">🔍</view>
+      <input
+        type="text"
+        placeholder="搜索文件名/商品条形码"
+        value="{{keyword}}"
+        bindinput="onSearchInput"
+        confirm-type="search"
+      />
+    </view>
+    <view class="scan-icon" bindtap="scanCode">⊞</view>
+  </view>
+
+  <!-- 列表头 -->
+  <view class="list-header">
+    <text class="header-tip">文件(左滑置顶/重命名/删除)</text>
+    <view class="sort-btn" bindtap="toggleSort">
+      <text>按创建时间排序</text>
+      <text class="sort-arrow">{{sortDesc ? '↓' : '↑'}}</text>
+    </view>
+  </view>
+
+  <!-- 文件列表 -->
+  <scroll-view scroll-y class="file-list" refresher-enabled refresher-triggered="{{refreshing}}" bindrefresherrefresh="onRefresh">
+    <view
+      class="file-item-wrap"
+      wx:for="{{files}}"
+      wx:key="id"
+      bindtouchstart="touchStart"
+      bindtouchmove="touchMove"
+      bindtouchend="touchEnd"
+      data-index="{{index}}"
+    >
+      <view class="file-actions" style="width: {{actionWidth}}rpx;">
+        <view class="action-btn pin" bindtap="pinFile" data-id="{{item.id}}">置顶</view>
+        <view class="action-btn rename" bindtap="renameFile" data-id="{{item.id}}" data-name="{{item.name}}">重命名</view>
+        <view class="action-btn delete" bindtap="deleteFile" data-id="{{item.id}}">删除</view>
+      </view>
+      <view class="file-item" style="transform: translateX({{item.translateX || 0}}rpx);">
+        <view class="file-icon">📁</view>
+        <view class="file-info">
+          <view class="file-name">{{item.name}}</view>
+          <view class="file-meta">{{item.count}}条 · {{item.updatedAt}}</view>
+        </view>
+        <view class="file-arrow">›</view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{files.length === 0}}" class="empty-state">
+      <view class="empty-icon">
+        <view class="empty-img">🖼</view>
+        <view class="empty-dot"></view>
+      </view>
+      <view class="empty-title">无任何文件记录~</view>
+      <view class="empty-desc">点击下方按钮开始批量扫描</view>
+    </view>
+  </scroll-view>
+
+  <!-- 悬浮加号 -->
+  <view class="fab" bindtap="createFile">
+    <view class="fab-icon">+</view>
+  </view>
+</view>
