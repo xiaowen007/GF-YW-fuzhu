@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "物料详情",
+  "navigationBarBackgroundColor": "#5B6CFF",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#F5F7FA",
+  "enablePullDownRefresh": false
+}
