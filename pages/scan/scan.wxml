@@ -1,0 +1,65 @@
+<view class="container">
+  <view class="card mode-info">
+    <view class="mode-title">{{modeTitle}}</view>
+    <view class="mode-desc">{{modeDesc}}</view>
+  </view>
+
+  <!-- 摄像头预览 -->
+  <view class="scan-preview" wx:if="{{mode !== 'image'}}">
+    <camera
+      mode="scanCode"
+      device-position="back"
+      flash="off"
+      bindscancode="onScanCode"
+      class="camera"
+      wx:if="{{showCamera}}"
+    ></camera>
+    <view wx:else class="camera-placeholder">
+      <view class="icon">📷</view>
+      <text>相机权限未开启</text>
+    </view>
+
+    <view class="scan-actions">
+      <view class="action-btn" bindtap="toggleCamera">{{showCamera ? '关闭相机' : '打开相机'}}</view>
+      <view class="action-btn primary" bindtap="scanWithSystem">系统扫码</view>
+    </view>
+  </view>
+
+  <!-- 图片批量解码 -->
+  <view class="card image-decode" wx:if="{{mode === 'image'}}">
+    <view class="section-title">选择图片识别</view>
+    <view class="btn-primary" bindtap="chooseImage">从相册选择</view>
+    <view class="image-list" wx:if="{{images.length > 0}}">
+      <image wx:for="{{images}}" wx:key="*this" src="{{item}}" mode="aspectFill" class="thumb"/>
+    </view>
+    <view class="decode-result" wx:if="{{decodeResults.length > 0}}">
+      <view class="section-title">识别结果</view>
+      <view class="result-item" wx:for="{{decodeResults}}" wx:key="id">
+        <text>{{item.code}}</text>
+        <text class="result-type">{{item.type}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 扫描结果列表 -->
+  <view class="card" wx:if="{{mode !== 'single' && mode !== 'image'}}">
+    <view class="section-title">
+      扫描结果
+      <text class="count">({{results.length}})</text>
+    </view>
+    <view class="result-item" wx:for="{{results}}" wx:key="id">
+      <text class="code">{{item.code}}</text>
+      <text class="type">{{item.scanType}}</text>
+    </view>
+    <view wx:if="{{results.length === 0}}" class="empty-state">
+      <view class="icon">📭</view>
+      <text>暂无扫描结果</text>
+    </view>
+  </view>
+
+  <!-- 底部操作 -->
+  <view class="bottom-actions" wx:if="{{mode !== 'single' && mode !== 'image'}}">
+    <view class="btn-secondary" bindtap="clearResults">清空</view>
+    <view class="btn-primary" bindtap="saveResults">保存记录</view>
+  </view>
+</view>
