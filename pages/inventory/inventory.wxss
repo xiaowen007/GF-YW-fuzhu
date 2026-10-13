@@ -1,0 +1,275 @@
+page {
+  background: #F5F7FA;
+}
+
+.page {
+  min-height: 100vh;
+  padding-bottom: 160rpx;
+}
+
+/* 教程 banner */
+.banner {
+  background: #fff;
+  margin: 20rpx 24rpx;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+}
+
+.banner-icon {
+  font-size: 32rpx;
+  margin-right: 12rpx;
+}
+
+.banner-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: #5B6CFF;
+}
+
+.banner-arrow {
+  color: #ccc;
+  font-size: 36rpx;
+}
+
+/* 操作按钮 */
+.action-cards {
+  display: flex;
+  gap: 20rpx;
+  padding: 0 24rpx 20rpx;
+}
+
+.action-card {
+  flex: 1;
+  border-radius: 20rpx;
+  padding: 28rpx;
+  color: #fff;
+  display: flex;
+  align-items: center;
+}
+
+.action-card.orange {
+  background: linear-gradient(135deg, #FF8F00 0%, #FF6F00 100%);
+}
+
+.action-card.green {
+  background: linear-gradient(135deg, #00C853 0%, #009624 100%);
+}
+
+.action-icon {
+  width: 56rpx;
+  height: 56rpx;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  margin-right: 16rpx;
+}
+
+.action-text {
+  font-size: 30rpx;
+  font-weight: 500;
+}
+
+/* 列表头 */
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 24rpx;
+  color: #666;
+  font-size: 24rpx;
+}
+
+.header-tip {
+  color: #999;
+}
+
+.sort-btn {
+  display: flex;
+  align-items: center;
+  color: #5B6CFF;
+}
+
+.sort-arrow {
+  margin-left: 6rpx;
+}
+
+/* 列表 */
+.sheet-list {
+  padding: 0 24rpx;
+}
+
+.sheet-item-wrap {
+  position: relative;
+  margin-bottom: 20rpx;
+  overflow: hidden;
+  border-radius: 20rpx;
+}
+
+.sheet-actions {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.action-btn {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 26rpx;
+  padding: 0 28rpx;
+}
+
+.action-btn.pin { background: #5B6CFF; }
+.action-btn.rename { background: #FF9C00; }
+.action-btn.delete { background: #FF5B5B; border-radius: 0 20rpx 20rpx 0; }
+
+.sheet-item {
+  position: relative;
+  z-index: 2;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 28rpx;
+  display: flex;
+  align-items: center;
+}
+
+.sheet-icon {
+  width: 80rpx;
+  height: 80rpx;
+  background: #E8F5E9;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.sheet-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sheet-name {
+  font-size: 30rpx;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 8rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sheet-meta {
+  font-size: 24rpx;
+  color: #999;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.status {
+  padding: 2rpx 10rpx;
+  border-radius: 8rpx;
+  font-size: 22rpx;
+}
+
+.status.pending {
+  background: #FFF4E6;
+  color: #FF9C00;
+}
+
+.status.done {
+  background: #E8F5E9;
+  color: #07C160;
+}
+
+.sheet-arrow {
+  color: #ccc;
+  font-size: 40rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 140rpx;
+}
+
+.empty-icon {
+  position: relative;
+  width: 160rpx;
+  height: 120rpx;
+  margin-bottom: 32rpx;
+}
+
+.empty-img {
+  width: 140rpx;
+  height: 100rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.06);
+}
+
+.empty-dot {
+  position: absolute;
+  top: 0;
+  right: 10rpx;
+  width: 24rpx;
+  height: 24rpx;
+  background: #FF9C00;
+  border-radius: 50%;
+}
+
+.empty-title {
+  font-size: 30rpx;
+  color: #999;
+  margin-bottom: 12rpx;
+}
+
+.empty-desc {
+  font-size: 26rpx;
+  color: #bbb;
+}
+
+/* 悬浮加号 */
+.fab {
+  position: fixed;
+  bottom: 120rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120rpx;
+  height: 120rpx;
+  background: #00B0FF;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12rpx 40rpx rgba(0, 176, 255, 0.35);
+  z-index: 100;
+}
+
+.fab-icon {
+  color: #fff;
+  font-size: 64rpx;
+  font-weight: 300;
+}
