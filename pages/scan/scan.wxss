@@ -1,0 +1,134 @@
+.mode-info {
+  text-align: center;
+  padding: 32rpx;
+}
+
+.mode-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.mode-desc {
+  font-size: 26rpx;
+  color: #888;
+}
+
+.scan-preview {
+  margin-bottom: 24rpx;
+}
+
+.camera {
+  width: 100%;
+  height: 480rpx;
+  border-radius: 24rpx;
+  overflow: hidden;
+}
+
+.camera-placeholder {
+  width: 100%;
+  height: 480rpx;
+  background: #EEF0FF;
+  border-radius: 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+}
+
+.camera-placeholder .icon {
+  font-size: 80rpx;
+  margin-bottom: 16rpx;
+}
+
+.scan-actions {
+  display: flex;
+  justify-content: center;
+  gap: 24rpx;
+  margin-top: 24rpx;
+}
+
+.action-btn {
+  padding: 16rpx 40rpx;
+  background: #F5F7FA;
+  color: #666;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+}
+
+.action-btn.primary {
+  background: #5B6CFF;
+  color: #fff;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20rpx;
+  display: flex;
+  align-items: center;
+}
+
+.count {
+  font-size: 26rpx;
+  color: #999;
+  margin-left: 12rpx;
+  font-weight: 400;
+}
+
+.image-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-top: 20rpx;
+}
+
+.thumb {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 12rpx;
+}
+
+.result-item {
+  background: #F9FAFC;
+  border-radius: 12rpx;
+  padding: 20rpx 24rpx;
+  margin-bottom: 12rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.result-item .code {
+  font-size: 28rpx;
+  color: #333;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.result-item .type,
+.result-type {
+  font-size: 22rpx;
+  color: #5B6CFF;
+  background: #EEF0FF;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  margin-left: 16rpx;
+  flex-shrink: 0;
+}
+
+.bottom-actions {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 24rpx;
+}
+
+.bottom-actions .btn-secondary,
+.bottom-actions .btn-primary {
+  flex: 1;
+}
