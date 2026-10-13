@@ -1,0 +1,10 @@
+<view class="record-item" bindtap="onTap">
+  <view class="record-main">
+    <view class="record-title">{{title}}</view>
+    <view class="record-meta">{{meta}}</view>
+  </view>
+  <view class="record-right">
+    <text class="record-badge" wx:if="{{badge}}">{{badge}}</text>
+    <text class="record-arrow">›</text>
+  </view>
+</view>
