@@ -1,0 +1,23 @@
+<view class="container">
+  <view class="card">
+    <view class="section-title">{{pageTitle}}</view>
+    <view class="record-list">
+      <view class="record-row" wx:for="{{records}}" wx:key="id">
+        <view class="record-info">
+          <view class="record-code">{{item.code || item.content}}</view>
+          <view class="record-meta">{{item.createdAt}}</view>
+        </view>
+        <view class="record-actions">
+          <text class="record-type">{{item.scanType || item.type}}</text>
+          <text class="delete-btn" bindtap="deleteRecord" data-id="{{item.id}}">删除</text>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{records.length === 0}}" class="empty-state">
+      <view class="icon">📭</view>
+      <text>暂无记录</text>
+    </view>
+  </view>
+
+  <view class="btn-secondary" bindtap="clearAll" wx:if="{{records.length > 0}}">清空全部</view>
+</view>
