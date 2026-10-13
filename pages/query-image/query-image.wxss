@@ -1,0 +1,375 @@
+/* AI 识图查询页样式：沿用物料查询主风格（--primary 白卡圆角阴影） */
+
+.intro-card__head {
+  display: flex;
+  align-items: center;
+}
+
+.intro-card__icon {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 18rpx;
+  background: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 38rpx;
+  flex-shrink: 0;
+}
+
+.intro-card__body {
+  flex: 1;
+  min-width: 0;
+  margin-left: 20rpx;
+}
+
+.intro-card__title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.intro-card__desc {
+  font-size: 22rpx;
+  color: var(--text-tertiary);
+  margin-top: 6rpx;
+  line-height: 1.4;
+}
+
+.intro-card__tips {
+  margin-top: 16rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid var(--border);
+}
+
+.intro-card__tip {
+  display: block;
+  font-size: 22rpx;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.picker-card__grid {
+  display: flex;
+}
+
+.picker-btn {
+  flex: 1;
+  background: var(--bg);
+  border-radius: 16rpx;
+  padding: 32rpx 16rpx;
+  text-align: center;
+}
+
+.picker-btn:first-child {
+  margin-right: 20rpx;
+}
+
+.picker-btn--hover {
+  background: var(--primary-light);
+}
+
+.picker-btn__icon {
+  font-size: 52rpx;
+}
+
+.picker-btn__title {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: var(--text);
+  margin-top: 12rpx;
+}
+
+.picker-btn__desc {
+  font-size: 20rpx;
+  color: var(--text-tertiary);
+  margin-top: 6rpx;
+}
+
+.picker-card__preview {
+  width: 100%;
+  height: 420rpx;
+  border-radius: 16rpx;
+  background: var(--bg);
+}
+
+.picker-card__actions {
+  display: flex;
+  margin-top: 20rpx;
+}
+
+.picker-card__btn {
+  flex: 1;
+}
+
+.picker-card__btn:first-child {
+  margin-right: 16rpx;
+}
+
+.picker-card__recognizing {
+  position: relative;
+}
+
+.recognizing-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20rpx;
+}
+
+.recognizing-bar__spinner {
+  width: 32rpx;
+  height: 32rpx;
+  border: 4rpx solid var(--primary-light);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  margin-right: 12rpx;
+  animation: qi-spin 0.8s linear infinite;
+}
+
+@keyframes qi-spin {
+  to { transform: rotate(360deg); }
+}
+
+.recognizing-bar__text {
+  font-size: 26rpx;
+  color: var(--primary);
+}
+
+.recognizing-bar__hint {
+  text-align: center;
+  font-size: 20rpx;
+  color: var(--text-tertiary);
+  margin-top: 10rpx;
+}
+
+.result-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+
+.result-card__badge {
+  font-size: 20rpx;
+  border-radius: 8rpx;
+  padding: 4rpx 12rpx;
+}
+
+.result-card__badge--high {
+  color: var(--success);
+  background: rgba(76, 175, 80, 0.12);
+}
+
+.result-card__badge--low {
+  color: var(--warning);
+  background: rgba(255, 152, 0, 0.12);
+}
+
+.result-card__warn {
+  font-size: 22rpx;
+  color: var(--warning);
+  background: rgba(255, 152, 0, 0.1);
+  border-radius: 12rpx;
+  padding: 12rpx 16rpx;
+  margin: 12rpx 0;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  padding: 14rpx 0;
+  border-bottom: 1rpx solid var(--border);
+}
+
+.form-row:last-child {
+  border-bottom: none;
+}
+
+.form-row__label {
+  width: 140rpx;
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.form-row__input {
+  flex: 1;
+  height: 56rpx;
+  font-size: 26rpx;
+  color: var(--text);
+}
+
+.result-card__keywords {
+  margin-top: 16rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid var(--border);
+}
+
+.keyword-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 12rpx;
+}
+
+.keyword-chip {
+  display: inline-flex;
+  align-items: center;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: 100rpx;
+  padding: 6rpx 12rpx 6rpx 20rpx;
+  margin: 0 12rpx 12rpx 0;
+  font-size: 22rpx;
+}
+
+.keyword-chip__del {
+  margin-left: 8rpx;
+  font-size: 18rpx;
+  opacity: 0.7;
+}
+
+.keyword-empty {
+  font-size: 22rpx;
+  color: var(--text-tertiary);
+  margin: 4rpx 0 12rpx;
+}
+
+.keyword-add {
+  display: flex;
+  align-items: center;
+}
+
+.keyword-add__input {
+  flex: 1;
+  height: 64rpx;
+  background: var(--bg);
+  border-radius: 12rpx;
+  padding: 0 16rpx;
+  font-size: 24rpx;
+  color: var(--text);
+}
+
+.keyword-add__btn {
+  margin-left: 12rpx;
+  font-size: 24rpx;
+  color: #fff;
+  background: var(--primary);
+  border-radius: 12rpx;
+  padding: 14rpx 24rpx;
+}
+
+.result-card__raw {
+  margin-top: 16rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid var(--border);
+}
+
+.result-card__raw-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.result-card__raw-toggle {
+  font-size: 24rpx;
+  color: var(--primary);
+}
+
+.result-card__raw-text {
+  display: block;
+  margin-top: 12rpx;
+  font-size: 22rpx;
+  color: var(--text-secondary);
+  background: var(--bg);
+  border-radius: 12rpx;
+  padding: 16rpx;
+  line-height: 1.6;
+  word-break: break-all;
+}
+
+.result-card__actions {
+  display: flex;
+  margin-top: 24rpx;
+}
+
+.result-card__btn {
+  flex: 1;
+}
+
+.result-card__btn:first-child {
+  margin-right: 16rpx;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid var(--border);
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.history-item--hover {
+  opacity: 0.75;
+}
+
+.history-item__img {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 12rpx;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+.history-item__img--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+}
+
+.history-item__body {
+  flex: 1;
+  min-width: 0;
+  margin-left: 16rpx;
+}
+
+.history-item__name {
+  font-size: 26rpx;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.history-item__meta {
+  display: flex;
+  align-items: center;
+  margin-top: 6rpx;
+  font-size: 20rpx;
+  color: var(--text-tertiary);
+}
+
+.history-item__code {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  margin-right: 12rpx;
+}
+
+.history-item__hit {
+  margin-left: auto;
+  color: var(--primary);
+}
+
+.history-item__arrow {
+  font-size: 32rpx;
+  color: var(--text-tertiary);
+  margin-left: 12rpx;
+}
