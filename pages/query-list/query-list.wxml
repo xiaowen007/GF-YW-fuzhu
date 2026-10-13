@@ -1,0 +1,79 @@
+<view class="container">
+
+  <!-- 筛选区 -->
+  <view class="card filter-card">
+    <view class="search-bar">
+      <view class="search-bar__icon">🔍</view>
+      <input
+        class="search-bar__input"
+        value="{{keyword}}"
+        placeholder="物料号 / 名称 / 型号，支持拼音与同义词"
+        placeholder-class="search-bar__placeholder"
+        bindinput="onKeywordInput"
+      />
+      <view wx:if="{{keyword}}" class="search-bar__clear" bindtap="clearKeyword">✕</view>
+    </view>
+
+    <view wx:if="{{extraFilter}}" class="filter-card__extra">
+      <text class="filter-card__extra-text">附加条件：{{extraFilter}}</text>
+    </view>
+
+    <scroll-view scroll-x class="filter-scroll" enhanced show-scrollbar="{{false}}">
+      <view class="filter-row">
+        <view
+          class="filter-chip {{series === '' ? 'filter-chip--active' : ''}}"
+          hover-class="filter-chip--hover"
+          bindtap="selectSeries"
+          data-name=""
+        >全部系列</view>
+        <view
+          wx:for="{{seriesOptions}}"
+          wx:key="name"
+          class="filter-chip {{series === item.name ? 'filter-chip--active' : ''}}"
+          hover-class="filter-chip--hover"
+          bindtap="selectSeries"
+          data-name="{{item.name}}"
+        >{{item.name}} {{item.count}}</view>
+      </view>
+    </scroll-view>
+
+    <scroll-view wx:if="{{typeOptions.length}}" scroll-x class="filter-scroll" enhanced show-scrollbar="{{false}}">
+      <view class="filter-row">
+        <view
+          wx:for="{{typeOptions}}"
+          wx:key="name"
+          class="filter-chip filter-chip--type {{mtype === item.name ? 'filter-chip--active' : ''}}"
+          hover-class="filter-chip--hover"
+          bindtap="selectType"
+          data-name="{{item.name}}"
+        >{{item.name}} {{item.count}}</view>
+      </view>
+    </scroll-view>
+
+    <view class="filter-card__foot">
+      <text class="filter-card__total">共 {{total}} 条{{favoriteOnly ? '收藏' : '物料'}}</text>
+      <text wx:if="{{series || mtype}}" class="filter-card__clear" bindtap="clearFilter">清除筛选 ›</text>
+    </view>
+  </view>
+
+  <!-- 结果列表 -->
+  <view wx:if="{{list.length}}">
+    <material-card
+      wx:for="{{list}}"
+      wx:key="id"
+      item="{{item}}"
+      bindselect="onItemTap"
+    />
+    <view class="list-foot">
+      <text wx:if="{{hasMore}}">上拉加载更多…</text>
+      <text wx:else>— 已经到底了 —</text>
+    </view>
+  </view>
+
+  <view wx:elif="{{!loading}}" class="empty-state">
+    <view class="icon">🔍</view>
+    <view>没有找到匹配的物料</view>
+    <view class="empty-state__tip">支持拼音（duanluqi / dlq）、同义词（空开=断路器）、多关键词空格分隔</view>
+    <view class="empty-state__tip">或清除筛选条件后重试</view>
+  </view>
+</view>
