@@ -1,0 +1,198 @@
+.tip-card__title {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 12rpx;
+}
+
+.tip-card__item {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.tip-card__note {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: var(--text-tertiary);
+  line-height: 1.6;
+  background: var(--bg);
+  border-radius: 12rpx;
+  padding: 16rpx;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.section-actions {
+  display: flex;
+  align-items: center;
+}
+
+.section-action {
+  font-size: 24rpx;
+  color: var(--primary);
+  margin-left: 24rpx;
+}
+
+.section-action--danger {
+  color: var(--danger);
+}
+
+.import-textarea {
+  width: 100%;
+  height: 320rpx;
+  background: var(--bg);
+  border-radius: 16rpx;
+  padding: 20rpx;
+  box-sizing: border-box;
+  font-size: 26rpx;
+  color: var(--text);
+  line-height: 1.5;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+
+.import-textarea__placeholder {
+  color: var(--text-tertiary);
+}
+
+.import-btn {
+  margin-top: 20rpx;
+}
+
+.import-btn--disabled {
+  opacity: 0.6;
+}
+
+.stat-row {
+  display: flex;
+  background: var(--bg);
+  border-radius: 16rpx;
+  padding: 20rpx 0;
+}
+
+.stat-row__item {
+  flex: 1;
+  text-align: center;
+}
+
+.stat-row__num {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.stat-row__num--success {
+  color: var(--success);
+}
+
+.stat-row__num--danger {
+  color: var(--danger);
+}
+
+.stat-row__label {
+  font-size: 22rpx;
+  color: var(--text-tertiary);
+  margin-top: 4rpx;
+}
+
+.preview-list {
+  margin-top: 20rpx;
+}
+
+.preview-item {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid var(--border);
+}
+
+.preview-item__code {
+  width: 190rpx;
+  flex-shrink: 0;
+  font-size: 24rpx;
+  color: var(--primary);
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+}
+
+.preview-item__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.preview-item__name {
+  font-size: 26rpx;
+  color: var(--text);
+}
+
+.preview-item__meta {
+  font-size: 22rpx;
+  color: var(--text-tertiary);
+  margin-top: 4rpx;
+}
+
+.preview-more {
+  padding: 16rpx 0;
+  font-size: 24rpx;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+.import-done {
+  margin-top: 16rpx;
+  font-size: 26rpx;
+  color: var(--success);
+  background: #F0FBF4;
+  border-radius: 12rpx;
+  padding: 16rpx 20rpx;
+}
+
+.field-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.field-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 14rpx 0;
+  border-bottom: 1rpx solid var(--border);
+}
+
+.field-row:last-child {
+  border-bottom: none;
+}
+
+.field-row__label {
+  width: 210rpx;
+  flex-shrink: 0;
+  font-size: 26rpx;
+  color: var(--text);
+}
+
+.field-row__required {
+  font-size: 20rpx;
+  color: var(--danger);
+  margin-left: 8rpx;
+}
+
+.field-row__value {
+  flex: 1;
+  font-size: 24rpx;
+  color: var(--text);
+  word-break: break-all;
+}
+
+.field-row__value--muted {
+  color: var(--text-tertiary);
+}
