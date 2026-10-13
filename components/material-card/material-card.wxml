@@ -1,0 +1,33 @@
+<view class="mq-card" hover-class="mq-card--hover" bindtap="onTap">
+  <image wx:if="{{item.cover}}" class="mq-thumb" src="{{item.cover}}" mode="aspectFill" lazy-load="{{true}}" />
+  <view wx:else class="mq-thumb mq-thumb--empty">
+    <text class="mq-thumb__text">暂无照片</text>
+  </view>
+
+  <view class="mq-card__info">
+    <view class="mq-card__name">
+      <block wx:if="{{item.hl && item.hl.name.length > 1}}">
+        <text wx:for="{{item.hl.name}}" wx:for-item="seg" wx:key="*this" class="{{seg.hit ? 'mq-hl' : ''}}">{{seg.text}}</text>
+      </block>
+      <text wx:else>{{item.name || item.model || '未命名物料'}}</text>
+    </view>
+
+    <view class="mq-card__meta">
+      <block wx:if="{{item.hl && item.hl.code.length > 1}}">
+        <text wx:for="{{item.hl.code}}" wx:for-item="seg" wx:key="*this" class="mq-card__code {{seg.hit ? 'mq-hl' : ''}}">{{seg.text}}</text>
+      </block>
+      <text wx:else class="mq-card__code">{{item.code}}</text>
+      <text wx:if="{{item.model}}" class="mq-card__model">· {{item.model}}</text>
+    </view>
+
+    <view class="mq-card__tags">
+      <text wx:if="{{item.series}}" class="mq-tag mq-tag--primary">{{item.series}}</text>
+      <text wx:if="{{item.mtype}}" class="mq-tag mq-tag--info">{{item.mtype}}</text>
+      <text wx:if="{{item.location}}" class="mq-tag mq-tag--gray">{{item.location}}</text>
+      <text wx:if="{{item.hasFake}}" class="mq-tag mq-tag--danger">有异常对照</text>
+      <text wx:if="{{item.photoCount}}" class="mq-tag mq-tag--gray">{{item.photoCount}}图</text>
+    </view>
+  </view>
+
+  <view class="mq-card__fav" wx:if="{{item.favorited}}">★</view>
+</view>
