@@ -1,0 +1,9 @@
+{
+  "name": "get-miniprogram-code",
+  "version": "1.0.0",
+  "description": "生成小程序码（wxacode.getUnlimited）并存入云存储，返回临时链接",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}
