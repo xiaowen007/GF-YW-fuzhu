@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>物料库管理后台 · 光伏运维辅助</title>
+<link rel="stylesheet" href="./assets/admin.css">
+</head>
+<body>
+
+<!-- ============ 顶部栏 ============ -->
+<header class="topbar">
+  <div class="topbar__left">
+    <div class="brand">
+      <span class="brand__mark">仓</span>
+      <div class="brand__text">
+        <strong>物料库管理后台</strong>
+        <small id="brandSub">光伏运维辅助</small>
+      </div>
+    </div>
+  </div>
+  <div class="topbar__right">
+    <span class="stat-chip" id="chipTotal">物料 —</span>
+    <span class="stat-chip" id="chipPhoto">照片 —</span>
+    <span class="stat-chip stat-chip--warn" id="chipFake">异常对照 —</span>
+    <button class="btn btn--ghost" id="btnExport" title="导出 JSON 备份">导出</button>
+    <button class="btn btn--ghost" id="btnImport" title="导入 JSON 备份">导入</button>
+    <input type="file" id="fileImport" accept=".json,application/json" hidden>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- ============ 左侧筛选 ============ -->
+  <aside class="sidebar">
+    <section class="panel">
+      <h3 class="panel__title">检索</h3>
+      <div class="search">
+        <input type="search" id="searchInput" placeholder="料号 / 名称 / 拼音 / 空开…" autocomplete="off">
+        <button class="search__clear" id="btnClearSearch" hidden>✕</button>
+      </div>
+      <p class="hint">支持拼音 <code>duanluqi</code>、首字母 <code>dlq</code>、同义词 <code>空开</code>、空格多词 AND、料号笔误容错</p>
+      <div class="chips" id="historyChips"></div>
+    </section>
+
+    <section class="panel">
+      <h3 class="panel__title">系列 <span class="panel__count" id="countSeries"></span></h3>
+      <ul class="filter-list" id="filterSeries"></ul>
+    </section>
+
+    <section class="panel">
+      <h3 class="panel__title">类型 <span class="panel__count" id="countType"></span></h3>
+      <ul class="filter-list" id="filterType"></ul>
+    </section>
+
+    <section class="panel">
+      <h3 class="panel__title">数据维护</h3>
+      <button class="btn btn--primary btn--block" id="btnNew">＋ 新增物料</button>
+      <button class="btn btn--ghost btn--block" id="btnRestoreSeed">恢复初始 14 条</button>
+      <button class="btn btn--danger btn--block" id="btnClearAll">清空全部物料</button>
+      <p class="hint hint--warn">数据存于本机浏览器。换电脑 / 清缓存前请先「导出」备份。</p>
+    </section>
+  </aside>
+
+  <!-- ============ 主区 ============ -->
+  <main class="main">
+
+    <!-- 工具栏 -->
+    <div class="toolbar">
+      <div class="toolbar__left">
+        <h2 class="toolbar__title" id="resultTitle">全部物料</h2>
+        <span class="toolbar__meta" id="resultMeta"></span>
+      </div>
+      <div class="toolbar__right">
+        <label class="select-wrap">
+          排序
+          <select id="sortSelect">
+            <option value="relevance">相关度</option>
+            <option value="updated">最近修改</option>
+            <option value="code">料号</option>
+            <option value="name">名称</option>
+          </select>
+        </label>
+        <div class="view-toggle">
+          <button class="view-toggle__btn is-active" data-view="table">表格</button>
+          <button class="view-toggle__btn" data-view="card">卡片</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 条件提示 -->
+    <div class="active-filters" id="activeFilters" hidden></div>
+
+    <!-- 表格视图 -->
+    <div class="table-wrap" id="tableWrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="col-photo">照片</th>
+            <th data-sort="code" class="col-code sortable">料号</th>
+            <th data-sort="name" class="col-name sortable">名称</th>
+            <th class="col-series">系列</th>
+            <th class="col-type">类型</th>
+            <th class="col-model">型号</th>
+            <th class="col-loc">位置</th>
+            <th class="col-stock">库存</th>
+            <th class="col-remark">备注</th>
+            <th class="col-ops">操作</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <div class="empty" id="tableEmpty" hidden>
+        <p class="empty__icon">🔍</p>
+        <p class="empty__text">没有匹配的物料</p>
+        <p class="empty__sub">试试更短的关键词，或清空筛选条件</p>
+      </div>
+    </div>
+
+    <!-- 卡片视图 -->
+    <div class="card-grid" id="cardGrid" hidden></div>
+
+    <!-- 分页 -->
+    <div class="pager" id="pager" hidden>
+      <button class="btn btn--ghost" id="btnPrev">上一页</button>
+      <span class="pager__info" id="pagerInfo"></span>
+      <button class="btn btn--ghost" id="btnNext">下一页</button>
+    </div>
+
+  </main>
+</div>
+
+<!-- ============ 编辑抽屉 ============ -->
+<div class="drawer-mask" id="drawerMask" hidden></div>
+<aside class="drawer" id="drawer" hidden>
+  <div class="drawer__head">
+    <h3 id="drawerTitle">新增物料</h3>
+    <button class="drawer__close" id="btnDrawerClose">✕</button>
+  </div>
+
+  <form class="drawer__body" id="editForm">
+    <div class="field-grid">
+      <label class="field field--req">
+        <span>物料号 *</span>
+        <input name="code" required placeholder="如 1980004179">
+      </label>
+      <label class="field">
+        <span>名称</span>
+        <input name="name" placeholder="如 断路器NXB-125 4P C100">
+      </label>
+      <label class="field">
+        <span>系列</span>
+        <input name="series" list="dlSeries" placeholder="如 断路器">
+      </label>
+      <label class="field">
+        <span>类型</span>
+        <input name="mtype" list="dlType" placeholder="如 NXB">
+      </label>
+      <label class="field">
+        <span>型号</span>
+        <input name="model" placeholder="如 NXB-125E/100A 4P">
+      </label>
+      <label class="field">
+        <span>单位</span>
+        <input name="unit" placeholder="如 个 / 只 / 米">
+      </label>
+      <label class="field">
+        <span>存放位置</span>
+        <input name="location" placeholder="如 A区-3排-2层">
+      </label>
+      <label class="field">
+        <span>库存</span>
+        <input name="stock" placeholder="如 120">
+      </label>
+      <label class="field">
+        <span>品牌</span>
+        <input name="brand" placeholder="如 正泰">
+      </label>
+      <label class="field">
+        <span>价格</span>
+        <input name="price" placeholder="如 35.00">
+      </label>
+      <label class="field">
+        <span>物料组</span>
+        <input name="group">
+      </label>
+      <label class="field">
+        <span>二级分类</span>
+        <input name="subCategory">
+      </label>
+    </div>
+
+    <label class="field">
+      <span>备注 / 判定要点</span>
+      <textarea name="remark" rows="2" placeholder="如 125A 的非公司件"></textarea>
+    </label>
+
+    <div class="photo-block">
+      <div class="photo-block__head">
+        <span>正品照片</span>
+        <button type="button" class="btn btn--mini" id="btnAddPhoto">＋ 添加</button>
+      </div>
+      <div class="photo-list" id="photoList"></div>
+      <input type="file" id="filePhoto" accept="image/*" multiple hidden>
+    </div>
+
+    <div class="photo-block">
+      <div class="photo-block__head">
+        <span>异常对照照片</span>
+        <button type="button" class="btn btn--mini" id="btnAddFake">＋ 添加</button>
+      </div>
+      <div class="photo-list" id="fakeList"></div>
+      <input type="file" id="fileFake" accept="image/*" multiple hidden>
+    </div>
+  </form>
+
+  <div class="drawer__foot">
+    <button class="btn btn--ghost" id="btnCancel">取消</button>
+    <button class="btn btn--primary" id="btnSave">保存</button>
+  </div>
+</aside>
+
+<!-- 批量导入弹窗 -->
+<div class="modal-mask" id="modalMask" hidden>
+  <div class="modal">
+    <div class="modal__head">
+      <h3>批量导入物料</h3>
+      <button class="modal__close" id="btnModalClose">✕</button>
+    </div>
+    <div class="modal__body">
+      <p class="hint">从 Excel 复制整块区域直接粘贴（含表头），或粘贴 CSV / JSON。表头支持中英文别名，按「物料号」去重更新。</p>
+      <textarea id="importText" rows="12" placeholder="物料号&#9;名称&#9;系列&#9;型号&#9;库存&#10;1980004179&#9;断路器NXB-125 4P&#9;断路器&#9;NXB-125E/100A 4P&#9;120"></textarea>
+      <div class="import-preview" id="importPreview" hidden></div>
+    </div>
+    <div class="modal__foot">
+      <label class="radio-inline"><input type="radio" name="impMode" value="upsert" checked> 按料号更新/新增</label>
+      <label class="radio-inline"><input type="radio" name="impMode" value="append"> 仅追加新料号</label>
+      <span class="spacer"></span>
+      <button class="btn btn--ghost" id="btnImportPreview">预览解析</button>
+      <button class="btn btn--primary" id="btnImportConfirm">确认导入</button>
+    </div>
+  </div>
+</div>
+
+<!-- 详情弹窗 -->
+<div class="modal-mask" id="detailMask" hidden>
+  <div class="modal modal--wide">
+    <div class="modal__head">
+      <h3 id="detailTitle">物料详情</h3>
+      <button class="modal__close" id="btnDetailClose">✕</button>
+    </div>
+    <div class="modal__body" id="detailBody"></div>
+    <div class="modal__foot">
+      <span class="spacer"></span>
+      <button class="btn btn--ghost" id="btnDetailEdit">编辑</button>
+      <button class="btn btn--primary" id="btnDetailClose2">关闭</button>
+    </div>
+  </div>
+</div>
+
+<!-- 提示条 -->
+<div class="toast" id="toast" hidden></div>
+
+<!-- datalist 供系列/类型联想 -->
+<datalist id="dlSeries"></datalist>
+<datalist id="dlType"></datalist>
+
+<script src="./assets/wx-shim.js"></script>
+<script src="./assets/app-bundle.js"></script>
+<script src="./assets/admin.js"></script>
+</body>
+</html>
