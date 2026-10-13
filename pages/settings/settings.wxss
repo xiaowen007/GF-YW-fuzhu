@@ -1,0 +1,228 @@
+page {
+  background: #F5F7FA;
+}
+
+.page {
+  min-height: 100vh;
+  padding: 20rpx 24rpx 60rpx;
+}
+
+/* 用户信息卡片 */
+.user-card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
+}
+
+.user-main {
+  display: flex;
+  align-items: center;
+  margin-bottom: 28rpx;
+}
+
+.avatar {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: #EEF0FF;
+  overflow: hidden;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+}
+
+.avatar-default {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44rpx;
+}
+
+.user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-name {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.user-tip {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.member-badge {
+  background: #EEF0FF;
+  color: #5B6CFF;
+  font-size: 22rpx;
+  padding: 6rpx 14rpx;
+  border-radius: 12rpx;
+}
+
+.member-row {
+  display: flex;
+  background: #F9FAFC;
+  border-radius: 16rpx;
+  padding: 24rpx 0;
+  margin-bottom: 24rpx;
+}
+
+.member-item {
+  flex: 1;
+  text-align: center;
+}
+
+.member-divider {
+  width: 2rpx;
+  background: #eee;
+}
+
+.member-label {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 8rpx;
+}
+
+.member-value {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.member-value.expired {
+  color: #999;
+}
+
+.upgrade-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.user-id {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.upgrade-btn {
+  background: #5B6CFF;
+  color: #fff;
+  font-size: 26rpx;
+  padding: 14rpx 28rpx;
+  border-radius: 12rpx;
+}
+
+/* 菜单卡片 */
+.menu-card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 24rpx 0;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
+}
+
+.menu-title {
+  font-size: 26rpx;
+  color: #999;
+  padding: 0 28rpx 16rpx;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 22rpx 28rpx;
+}
+
+.menu-icon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.menu-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.menu-name {
+  font-size: 30rpx;
+  color: #333;
+  margin-bottom: 6rpx;
+}
+
+.menu-desc {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.menu-arrow {
+  color: #ccc;
+  font-size: 40rpx;
+}
+
+.menu-extra {
+  font-size: 26rpx;
+  color: #999;
+}
+
+/* 小程序码 */
+.qrcode-card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 28rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
+}
+
+.qrcode-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.qrcode-desc {
+  font-size: 24rpx;
+  color: #999;
+  line-height: 1.5;
+  margin-bottom: 24rpx;
+}
+
+.qrcode-img {
+  width: 280rpx;
+  height: 280rpx;
+  background: #F5F7FA;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.qrcode-img image {
+  width: 100%;
+  height: 100%;
+}
+
+.qrcode-placeholder {
+  font-size: 26rpx;
+  color: #999;
+}
