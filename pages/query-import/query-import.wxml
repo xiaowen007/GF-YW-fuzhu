@@ -1,0 +1,93 @@
+<view class="container">
+
+  <!-- 使用说明 -->
+  <view class="card tip-card">
+    <view class="tip-card__title">支持三种粘贴格式</view>
+    <view class="tip-card__item">· Excel 直接复制粘贴（制表符分隔，最顺手）</view>
+    <view class="tip-card__item">· CSV 逗号分隔</view>
+    <view class="tip-card__item">· JSON 数组</view>
+    <view class="tip-card__note">有表头时按表头名识别（支持中英文别名），没表头时按固定列序理解；只有「物料号」是必填，缺物料号的整行会被跳过。</view>
+  </view>
+
+  <!-- 输入区 -->
+  <view class="card">
+    <view class="section-head">
+      <text class="section-title">粘贴数据</text>
+      <view class="section-actions">
+        <text class="section-action" bindtap="fillDemo">填入示例</text>
+        <text class="section-action section-action--danger" bindtap="clearText">清空</text>
+      </view>
+    </view>
+    <textarea
+      class="import-textarea"
+      value="{{text}}"
+      placeholder="在此粘贴 Excel 区域 / CSV / JSON…"
+      placeholder-class="import-textarea__placeholder"
+      bindinput="onTextInput"
+    />
+    <view class="btn-primary import-btn" bindtap="parse">解析</view>
+  </view>
+
+  <!-- 解析结果 -->
+  <view wx:if="{{result}}" class="card">
+    <view class="section-head">
+      <text class="section-title">解析结果</text>
+      <text class="section-more">{{result.hasHeader ? '已识别表头' : '按固定列序解析'}}</text>
+    </view>
+    <view class="stat-row">
+      <view class="stat-row__item">
+        <view class="stat-row__num">{{result.total}}</view>
+        <view class="stat-row__label">数据行</view>
+      </view>
+      <view class="stat-row__item">
+        <view class="stat-row__num stat-row__num--success">{{result.items.length}}</view>
+        <view class="stat-row__label">有效物料</view>
+      </view>
+      <view class="stat-row__item">
+        <view class="stat-row__num stat-row__num--danger">{{result.skipped}}</view>
+        <view class="stat-row__label">跳过（缺物料号）</view>
+      </view>
+    </view>
+
+    <view class="preview-list">
+      <view wx:for="{{previewItems}}" wx:key="code" class="preview-item">
+        <view class="preview-item__code">{{item.code}}</view>
+        <view class="preview-item__body">
+          <view class="preview-item__name">{{item.name || item.model || '未命名'}}</view>
+          <view class="preview-item__meta">
+            <text wx:if="{{item.series}}">{{item.series}}</text>
+            <text wx:if="{{item.mtype}}"> / {{item.mtype}}</text>
+            <text wx:if="{{item.model}}"> / {{item.model}}</text>
+          </view>
+        </view>
+      </view>
+      <view wx:if="{{result.items.length > previewItems.length}}" class="preview-more">
+        还有 {{result.items.length - previewItems.length}} 条未展示…
+      </view>
+    </view>
+
+    <view class="btn-primary import-btn {{importing ? 'import-btn--disabled' : ''}}" bindtap="confirmImport">
+      {{importing ? '导入中…' : '确认导入'}}
+    </view>
+
+    <view wx:if="{{importResult}}" class="import-done">
+      ✅ 导入完成：新增 {{importResult.added}} 条，更新 {{importResult.updated}} 条
+    </view>
+  </view>
+
+  <!-- 字段说明 -->
+  <view class="card">
+    <view class="section-head">
+      <text class="section-title">字段说明</text>
+    </view>
+    <view class="field-table">
+      <view wx:for="{{columns}}" wx:key="key" class="field-row">
+        <text class="field-row__label">
+          {{item.label}}
+          <text wx:if="{{item.required}}" class="field-row__required">必填</text>
+        </text>
+        <text class="field-row__value field-row__value--muted">{{item.alias}}</text>
+      </view>
+    </view>
+  </view>
+</view>
