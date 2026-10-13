@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "物料列表",
+  "navigationBarBackgroundColor": "#5B6CFF",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#F5F7FA",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "material-card": "/components/material-card/material-card"
+  }
+}
