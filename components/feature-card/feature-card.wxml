@@ -1,0 +1,5 @@
+<view class="feature-card {{size === 'large' ? 'feature-card-large' : ''}}" style="background: {{bg}};" bindtap="onTap">
+  <view class="feature-icon">{{icon}}</view>
+  <view class="feature-title">{{title}}</view>
+  <view class="feature-desc">{{desc}}</view>
+</view>
