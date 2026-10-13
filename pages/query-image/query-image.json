@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "AI 识图查询",
+  "navigationBarBackgroundColor": "#5B6CFF",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#F5F7FA",
+  "enablePullDownRefresh": false
+}
