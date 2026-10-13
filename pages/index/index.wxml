@@ -1,0 +1,65 @@
+<view class="container">
+  <!-- 公告栏 -->
+  <view class="notice-card">
+    <view class="notice-badge">公告</view>
+    <view class="notice-content">
+      <text class="notice-title">V2.7.0 新版本发布</text>
+      <text class="notice-text">新增「物料查询」工具分类：扫码搜物料、正品/异常照片验真、收藏与批量导入维护。</text>
+    </view>
+  </view>
+
+  <!-- 大分类工具：物料查询 -->
+  <view class="category-card" hover-class="category-card--hover" bindtap="openQuery">
+    <view class="category-card__head">
+      <view class="category-card__icon">🔍</view>
+      <view class="category-card__body">
+        <view class="category-card__title">
+          物料查询
+          <text class="category-card__badge">工具分类</text>
+        </view>
+        <view class="category-card__desc">扫码搜物料 · AI 识图 · 正品/异常照片验真 · 批量导入维护</view>
+      </view>
+      <view class="category-card__arrow">›</view>
+    </view>
+    <view class="category-card__stats">
+      <view class="category-card__stat">
+        <text class="category-card__num">{{queryStat.total}}</text>
+        <text class="category-card__label">物料</text>
+      </view>
+      <view class="category-card__stat">
+        <text class="category-card__num">{{queryStat.photos}}</text>
+        <text class="category-card__label">照片</text>
+      </view>
+      <view class="category-card__quick">
+        <text class="category-card__quick-item" catchtap="openQueryImage">AI 识图</text>
+        <text class="category-card__quick-item" catchtap="openQueryFavorites">我的收藏</text>
+        <text class="category-card__quick-item" catchtap="openQueryImport">批量导入</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 主功能网格 -->
+  <view class="feature-grid">
+    <feature-card
+      wx:for="{{features}}"
+      wx:key="title"
+      icon="{{item.icon}}"
+      title="{{item.title}}"
+      desc="{{item.desc}}"
+      bg="{{item.bg}}"
+      url="{{item.url}}"
+      bindtap="onFeatureTap"
+      data-item="{{item}}"
+    />
+  </view>
+
+  <!-- 生成记录入口 -->
+  <view class="generate-record-card" bindtap="goToGenerateRecords">
+    <view class="generate-icon">📝</view>
+    <view class="generate-info">
+      <view class="generate-title">生成记录</view>
+      <view class="generate-desc">查看已生成的条形码和二维码历史</view>
+    </view>
+    <view class="generate-arrow">›</view>
+  </view>
+</view>
