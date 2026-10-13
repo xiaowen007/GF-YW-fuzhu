@@ -1,0 +1,43 @@
+name: 上传小程序到微信平台（自动部署）
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: '上传版本号'
+        required: false
+      desc:
+        description: '上传备注'
+        required: false
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 安装依赖（从 package.json）
+        run: npm install
+
+      - name: 写入上传密钥
+        run: printf '%s' "${{ secrets.WX_UPLOAD_KEY }}" | tr -d '\r' > ./private.key
+
+      - name: 上传小程序
+        env:
+          WX_APPID: ${{ secrets.WX_APPID }}
+          WX_PRIVATE_KEY_PATH: ./private.key
+          VERSION: ${{ github.event.inputs.version || github.run_number }}
+          DESC: ${{ github.event.inputs.desc || 'auto upload by CI' }}
+        run: node scripts/upload.js
+
+      - name: 清理密钥
+        if: always()
+        run: rm -f ./private.key
