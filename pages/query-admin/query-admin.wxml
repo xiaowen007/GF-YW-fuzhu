@@ -1,0 +1,165 @@
+<view class="container">
+
+  <!-- 我的身份 -->
+  <view class="card role-card">
+    <view class="role-card__head">
+      <view class="role-card__avatar">{{myRole === 'owner' ? '👑' : (myRole === 'editor' ? '🛠' : '👤')}}</view>
+      <view class="role-card__body">
+        <view class="role-card__role">{{roleText}}</view>
+        <view class="role-card__id">身份标识 {{identity}}</view>
+      </view>
+    </view>
+    <view class="role-card__desc">
+      <block wx:if="{{myRole === null}}">只读成员可以查物料、看照片与验真对照、收藏；录入与修改需要维护员及以上权限。</block>
+      <block wx:elif="{{myRole === 'editor'}}">维护员可以新增 / 修改 / 删除物料、批量导入、上传照片。</block>
+      <block wx:else>负责人拥有维护员全部权限，并可生成 / 撤销邀请码、移除维护员。</block>
+    </view>
+  </view>
+
+  <!-- 激活身份 -->
+  <view wx:if="{{!myRole}}" class="card">
+    <view class="section-head">
+      <text class="section-title">激活维护员 / 负责人</text>
+    </view>
+    <view class="redeem-bar">
+      <input
+        class="redeem-bar__input"
+        value="{{inviteCode}}"
+        placeholder="请输入邀请码"
+        placeholder-class="redeem-bar__placeholder"
+        bindinput="onInviteInput"
+      />
+      <view class="btn-primary redeem-bar__btn" bindtap="redeem">激活</view>
+    </view>
+    <view class="redeem-tip">邀请码由负责人生成，一次性使用。首次启用可用初始邀请码 PUNTFUUS 激活第一位负责人。</view>
+  </view>
+
+  <!-- 邀请码管理（负责人） -->
+  <view wx:if="{{isOwner}}" class="card">
+    <view class="section-head">
+      <text class="section-title">生成邀请码</text>
+    </view>
+
+    <view class="seg">
+      <view class="seg__item {{newInviteRole === 'editor' ? 'seg__item--active' : ''}}" bindtap="selectInviteRole" data-role="editor">维护员</view>
+      <view class="seg__item {{newInviteRole === 'owner' ? 'seg__item--active' : ''}}" bindtap="selectInviteRole" data-role="owner">负责人</view>
+    </view>
+
+    <view class="seg">
+      <view
+        wx:for="{{dayOptions}}"
+        wx:key="value"
+        class="seg__item {{newInviteDays === item.value ? 'seg__item--active' : ''}}"
+        bindtap="selectInviteDays"
+        data-days="{{item.value}}"
+      >{{item.label}}</view>
+    </view>
+
+    <view class="form-item">
+      <text class="form-item__label">备注</text>
+      <input
+        class="form-item__input"
+        value="{{newInviteRemark}}"
+        placeholder="发给谁，选填"
+        placeholder-class="form-item__placeholder"
+        bindinput="onRemarkInput"
+      />
+    </view>
+
+    <view class="btn-primary" bindtap="createInvite">生成邀请码</view>
+  </view>
+
+  <!-- 邀请码列表 -->
+  <view class="card">
+    <view class="section-head">
+      <text class="section-title">邀请码列表</text>
+      <text class="section-more">{{invites.length}} 个</text>
+    </view>
+    <view class="invite-list">
+      <view wx:for="{{invites}}" wx:key="id" class="invite-item">
+        <view class="invite-item__main">
+          <view class="invite-item__code">{{item.code}}</view>
+          <view class="invite-item__meta">
+            <text class="invite-item__role">{{item.role === 'owner' ? '负责人' : '维护员'}}</text>
+            <text class="invite-item__expiry">{{item.expiry}}</text>
+          </view>
+          <view wx:if="{{item.remark}}" class="invite-item__remark">{{item.remark}}</view>
+        </view>
+        <view class="invite-item__side">
+          <text class="invite-item__status invite-item__status--{{item.status.tone}}">{{item.status.text}}</text>
+          <view wx:if="{{!item.usedBy}}" class="invite-item__ops">
+            <text class="invite-item__op" bindtap="copyInvite" data-code="{{item.code}}">复制</text>
+            <text wx:if="{{isOwner}}" class="invite-item__op invite-item__op--danger" bindtap="revokeInvite" data-id="{{item.id}}">撤销</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 管理员名单 -->
+  <view class="card">
+    <view class="section-head">
+      <text class="section-title">维护人员名单</text>
+      <text class="section-more">{{admins.length}} 人</text>
+    </view>
+    <view class="admin-list">
+      <view wx:for="{{admins}}" wx:key="identity" class="admin-item">
+        <view class="admin-item__body">
+          <view class="admin-item__name">
+            {{item.roleText}}
+            <text wx:if="{{item.isMe}}" class="admin-item__me">我</text>
+          </view>
+          <view class="admin-item__id">{{item.shortId}}</view>
+        </view>
+        <view
+          wx:if="{{isOwner && !item.isMe && item.role !== 'owner'}}"
+          class="admin-item__remove"
+          bindtap="removeAdmin"
+          data-identity="{{item.identity}}"
+        >移除</view>
+      </view>
+    </view>
+    <view class="admin-tip">负责人不能被移除，保证系统里始终至少有一位负责人。</view>
+  </view>
+
+  <!-- 数据维护 -->
+  <view wx:if="{{canWrite}}" class="card">
+    <view class="section-head">
+      <text class="section-title">数据维护</text>
+    </view>
+    <view class="entry-list">
+      <view class="entry-item" hover-class="entry-item--hover" bindtap="createMaterial">
+        <view class="entry-item__icon entry-item__icon--success">＋</view>
+        <view class="entry-item__body">
+          <view class="entry-item__title">新增物料</view>
+          <view class="entry-item__desc">逐条录入并上传照片</view>
+        </view>
+        <view class="entry-item__arrow">›</view>
+      </view>
+      <view class="entry-item" hover-class="entry-item--hover" bindtap="openImport">
+        <view class="entry-item__icon entry-item__icon--info">⇪</view>
+        <view class="entry-item__body">
+          <view class="entry-item__title">批量导入</view>
+          <view class="entry-item__desc">Excel / CSV / JSON 粘贴导入</view>
+        </view>
+        <view class="entry-item__arrow">›</view>
+      </view>
+      <view class="entry-item" hover-class="entry-item--hover" bindtap="restoreSeed">
+        <view class="entry-item__icon entry-item__icon--primary">↺</view>
+        <view class="entry-item__body">
+          <view class="entry-item__title">恢复初始数据</view>
+          <view class="entry-item__desc">写回内置 14 条种子物料</view>
+        </view>
+        <view class="entry-item__arrow">›</view>
+      </view>
+      <view class="entry-item" hover-class="entry-item--hover" bindtap="clearAll">
+        <view class="entry-item__icon entry-item__icon--danger">🗑</view>
+        <view class="entry-item__body">
+          <view class="entry-item__title entry-item__title--danger">清空物料</view>
+          <view class="entry-item__desc">删除全部物料与收藏，不可恢复</view>
+        </view>
+        <view class="entry-item__arrow">›</view>
+      </view>
+    </view>
+  </view>
+</view>
