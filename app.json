@@ -1,0 +1,67 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/batch/batch",
+    "pages/inventory/inventory",
+    "pages/settings/settings",
+    "pages/scan/scan",
+    "pages/records/records",
+    "pages/generate/generate",
+    "pages/cloud/cloud",
+    "pages/compare/compare",
+    "pages/accumulate/accumulate",
+    "pages/query/query",
+    "pages/query-list/query-list",
+    "pages/material-detail/material-detail",
+    "pages/material-edit/material-edit",
+    "pages/query-import/query-import",
+    "pages/query-admin/query-admin",
+    "pages/query-image/query-image"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#5B6CFF",
+    "navigationBarTitleText": "光伏运维辅助",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F5F7FA"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#5B6CFF",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "assets/icons/home.png",
+        "selectedIconPath": "assets/icons/home-active.png"
+      },
+      {
+        "pagePath": "pages/batch/batch",
+        "text": "批量扫码",
+        "iconPath": "assets/icons/batch.png",
+        "selectedIconPath": "assets/icons/batch-active.png"
+      },
+      {
+        "pagePath": "pages/inventory/inventory",
+        "text": "盘点",
+        "iconPath": "assets/icons/inventory.png",
+        "selectedIconPath": "assets/icons/inventory-active.png"
+      },
+      {
+        "pagePath": "pages/settings/settings",
+        "text": "设置",
+        "iconPath": "assets/icons/settings.png",
+        "selectedIconPath": "assets/icons/settings-active.png"
+      }
+    ]
+  },
+  "cloud": true,
+  "sitemapLocation": "sitemap.json",
+  "permission": {
+    "scope.camera": {
+      "desc": "用于扫码识别条形码和二维码"
+    }
+  }
+}
