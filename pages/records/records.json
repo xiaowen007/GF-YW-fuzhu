@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "记录",
+  "usingComponents": {
+    "record-item": "../../components/record-item/record-item"
+  }
+}
