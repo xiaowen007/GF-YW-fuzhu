@@ -1,0 +1,26 @@
+name: 部署 Web 预览到 Cloudflare Pages（自动部署）
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 部署到 Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: inventory-wxapp
+          directory: ./web
+          branch: main
+          wranglerVersion: '3'
