@@ -1,0 +1,181 @@
+<view class="container">
+
+  <!-- 基本信息 -->
+  <view class="card">
+    <view class="section-head">
+      <text class="section-title">基本信息</text>
+      <text class="section-more">{{isEdit ? '编辑物料' : '新增物料'}}</text>
+    </view>
+
+    <view class="form-item form-item--required">
+      <text class="form-item__label">物料号</text>
+      <input
+        class="form-item__input"
+        value="{{form.code}}"
+        placeholder="唯一编号，如 1980004179"
+        placeholder-class="form-item__placeholder"
+        data-field="code"
+        bindinput="onFieldInput"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-item__label">名称</text>
+      <input
+        class="form-item__input"
+        value="{{form.name}}"
+        placeholder="物料名称"
+        placeholder-class="form-item__placeholder"
+        data-field="name"
+        bindinput="onFieldInput"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-item__label">型号</text>
+      <input
+        class="form-item__input"
+        value="{{form.model}}"
+        placeholder="如 NXB-125E/100A 4P"
+        placeholder-class="form-item__placeholder"
+        data-field="model"
+        bindinput="onFieldInput"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-item__label">系列</text>
+      <input
+        class="form-item__input"
+        value="{{form.series}}"
+        placeholder="如 断路器 / 重合闸"
+        placeholder-class="form-item__placeholder"
+        data-field="series"
+        bindinput="onFieldInput"
+      />
+    </view>
+    <scroll-view wx:if="{{seriesOptions.length}}" scroll-x class="quick-scroll" enhanced show-scrollbar="{{false}}">
+      <view class="quick-row">
+        <view
+          wx:for="{{seriesOptions}}"
+          wx:key="*this"
+          class="quick-chip"
+          hover-class="quick-chip--hover"
+          bindtap="pickSeries"
+          data-name="{{item}}"
+        >{{item}}</view>
+      </view>
+    </scroll-view>
+
+    <view class="form-item">
+      <text class="form-item__label">类型</text>
+      <input
+        class="form-item__input"
+        value="{{form.mtype}}"
+        placeholder="如 NXB / NBP / NM2LC"
+        placeholder-class="form-item__placeholder"
+        data-field="mtype"
+        bindinput="onFieldInput"
+      />
+    </view>
+    <scroll-view wx:if="{{typeOptions.length}}" scroll-x class="quick-scroll" enhanced show-scrollbar="{{false}}">
+      <view class="quick-row">
+        <view
+          wx:for="{{typeOptions}}"
+          wx:key="*this"
+          class="quick-chip quick-chip--info"
+          hover-class="quick-chip--hover"
+          bindtap="pickType"
+          data-name="{{item}}"
+        >{{item}}</view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 照片 -->
+  <view class="card">
+    <view class="section-head">
+      <text class="section-title">正品照片</text>
+      <text class="section-more">最多 9 张，自动压缩</text>
+    </view>
+    <view class="photo-grid">
+      <view wx:for="{{photos}}" wx:key="*this" class="photo-grid__item">
+        <image class="photo-grid__img" src="{{item}}" mode="aspectFill" />
+        <view class="photo-grid__remove" catchtap="removePhoto" data-kind="real" data-index="{{index}}">✕</view>
+      </view>
+      <view class="photo-grid__add" hover-class="photo-grid__add--hover" bindtap="choosePhoto" data-kind="real">
+        <text class="photo-grid__add-icon">＋</text>
+        <text class="photo-grid__add-text">上传照片</text>
+      </view>
+    </view>
+
+    <view class="section-head section-head--split">
+      <text class="section-title">异常照片</text>
+      <text class="section-more">用于验真比对</text>
+    </view>
+    <view class="photo-grid">
+      <view wx:for="{{fakePhotos}}" wx:key="*this" class="photo-grid__item">
+        <image class="photo-grid__img" src="{{item}}" mode="aspectFill" />
+        <view class="photo-grid__remove photo-grid__remove--danger" catchtap="removePhoto" data-kind="fake" data-index="{{index}}">✕</view>
+      </view>
+      <view class="photo-grid__add photo-grid__add--danger" hover-class="photo-grid__add--hover" bindtap="choosePhoto" data-kind="fake">
+        <text class="photo-grid__add-icon">＋</text>
+        <text class="photo-grid__add-text">上传异常照片</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 补充信息 -->
+  <view class="card">
+    <view class="section-head">
+      <text class="section-title">补充信息</text>
+    </view>
+    <view class="form-item">
+      <text class="form-item__label">单位</text>
+      <input class="form-item__input" value="{{form.unit}}" placeholder="如 个 / 台" placeholder-class="form-item__placeholder" data-field="unit" bindinput="onFieldInput" />
+    </view>
+    <view class="form-item">
+      <text class="form-item__label">存放位置</text>
+      <input class="form-item__input" value="{{form.location}}" placeholder="如 A区-3号货架" placeholder-class="form-item__placeholder" data-field="location" bindinput="onFieldInput" />
+    </view>
+    <view class="form-item">
+      <text class="form-item__label">库存</text>
+      <input class="form-item__input" value="{{form.stock}}" placeholder="当前库存数量" placeholder-class="form-item__placeholder" data-field="stock" bindinput="onFieldInput" />
+    </view>
+    <view class="form-item">
+      <text class="form-item__label">品牌</text>
+      <input class="form-item__input" value="{{form.brand}}" placeholder="品牌 / 厂家" placeholder-class="form-item__placeholder" data-field="brand" bindinput="onFieldInput" />
+    </view>
+    <view class="form-item">
+      <text class="form-item__label">价格</text>
+      <input class="form-item__input" value="{{form.price}}" placeholder="单价" placeholder-class="form-item__placeholder" data-field="price" bindinput="onFieldInput" />
+    </view>
+    <view class="form-item">
+      <text class="form-item__label">物料组</text>
+      <input class="form-item__input" value="{{form.group}}" placeholder="物料组 / 分组" placeholder-class="form-item__placeholder" data-field="group" bindinput="onFieldInput" />
+    </view>
+    <view class="form-item">
+      <text class="form-item__label">二级分类</text>
+      <input class="form-item__input" value="{{form.subCategory}}" placeholder="二级分类 / 子类" placeholder-class="form-item__placeholder" data-field="subCategory" bindinput="onFieldInput" />
+    </view>
+    <view class="form-item form-item--top">
+      <text class="form-item__label">备注 / 判定要点</text>
+      <textarea
+        class="form-item__textarea"
+        value="{{form.remark}}"
+        placeholder="验真判定要点、注意事项等"
+        placeholder-class="form-item__placeholder"
+        data-field="remark"
+        bindinput="onFieldInput"
+      />
+    </view>
+  </view>
+
+  <view class="submit-bar">
+    <view class="btn-primary submit-bar__btn" bindtap="save">{{saving ? '保存中…' : '保存'}}</view>
+    <view wx:if="{{isEdit}}" class="submit-bar__btn submit-bar__btn--danger" bindtap="remove">删除物料</view>
+  </view>
+
+  <!-- 照片压缩用的 2d canvas，保持隐藏 -->
+  <canvas type="2d" id="material-compress-canvas" class="compress-canvas"></canvas>
+</view>
