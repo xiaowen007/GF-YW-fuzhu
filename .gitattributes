@@ -1,0 +1,10 @@
+# 统一行尾，避免 Windows/Linux 协作时到处提示 CRLF
+* text=auto eol=lf
+
+# 二进制文件不做行尾转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.key binary
