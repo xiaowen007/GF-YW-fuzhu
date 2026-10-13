@@ -1,0 +1,55 @@
+<view class="container">
+  <view class="card summary-card">
+    <view class="summary-item">
+      <view class="summary-value">{{scanCount}}</view>
+      <view class="summary-label">扫描次数</view>
+    </view>
+    <view class="summary-item">
+      <view class="summary-value">{{totalQuantity}}</view>
+      <view class="summary-label">总数量</view>
+    </view>
+    <view class="summary-item">
+      <view class="summary-value">{{totalAmount.toFixed(2)}}</view>
+      <view class="summary-label">总金额</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">当前扫码信息</view>
+    <view class="form-row">
+      <text class="form-label">条码</text>
+      <input type="text" placeholder="点击扫码" value="{{currentCode}}" bindinput="onCodeInput"/>
+      <view class="scan-mini" bindtap="scanCode">扫码</view>
+    </view>
+    <view class="form-row">
+      <text class="form-label">数量</text>
+      <input type="digit" placeholder="0" value="{{currentQuantity}}" bindinput="onQuantityInput"/>
+    </view>
+    <view class="form-row">
+      <text class="form-label">单价</text>
+      <input type="digit" placeholder="0.00" value="{{currentPrice}}" bindinput="onPriceInput"/>
+    </view>
+    <view class="form-row">
+      <text class="form-label">重量</text>
+      <input type="digit" placeholder="0.00" value="{{currentWeight}}" bindinput="onWeightInput"/>
+    </view>
+    <view class="btn-primary" bindtap="addItem">添加</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">累加明细</view>
+    <view class="detail-item" wx:for="{{items}}" wx:key="id">
+      <view>
+        <view class="detail-code">{{item.code || '未扫码'}}</view>
+        <view class="detail-meta">数量 {{item.quantity}} · 单价 {{item.price}}</view>
+      </view>
+      <view class="detail-amount">¥{{item.amount.toFixed(2)}}</view>
+    </view>
+    <view wx:if="{{items.length === 0}}" class="empty-state">
+      <view class="icon">🧮</view>
+      <text>暂无累加明细</text>
+    </view>
+  </view>
+
+  <view class="btn-secondary" bindtap="clearAll">清空全部</view>
+</view>
