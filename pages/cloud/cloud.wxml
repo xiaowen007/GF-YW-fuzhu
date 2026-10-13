@@ -1,0 +1,55 @@
+<view class="page">
+  <!-- 顶部 tab -->
+  <view class="tabs">
+    <view class="tab {{activeTab === 'cloud' ? 'active' : ''}}" bindtap="switchTab" data-tab="cloud">云环境</view>
+    <view class="tab {{activeTab === 'recycle' ? 'active' : ''}}" bindtap="switchTab" data-tab="recycle">数据回收</view>
+  </view>
+
+  <!-- 云环境 tab -->
+  <view wx:if="{{activeTab === 'cloud'}}" class="tab-panel">
+    <view class="card">
+      <view class="section-title">云环境 ID</view>
+      <input class="cloud-input" placeholder="请输入微信云开发环境 ID" value="{{cloudEnv}}" bindinput="onInput"/>
+      <view class="tip">在微信开发者工具中开通云开发后可获得环境 ID。</view>
+      <view class="btn-primary" bindtap="saveEnv">保存并初始化</view>
+    </view>
+
+    <view class="card">
+      <view class="section-title">云盘绑定</view>
+      <view class="tip">绑定后可将数据备份与文件上传同步到微信云存储。</view>
+      <view class="btn-secondary" bindtap="uploadBackup">上传数据备份</view>
+    </view>
+
+    <view class="card">
+      <view class="section-title">数据同步</view>
+      <view class="sync-row">
+        <view class="btn-secondary" bindtap="syncToCloud">本地上传云端</view>
+        <view class="btn-secondary" bindtap="syncFromCloud">云端下载本地</view>
+      </view>
+    </view>
+
+    <view class="status-text {{cloudReady ? 'ready' : ''}}">
+      云开发状态：{{cloudReady ? '已连接' : '未连接'}}
+    </view>
+  </view>
+
+  <!-- 数据回收 tab -->
+  <view wx:if="{{activeTab === 'recycle'}}" class="tab-panel">
+    <view wx:if="{{recycleBin.length === 0}}" class="empty-state">
+      <view class="icon">🗑</view>
+      <text>回收站为空</text>
+    </view>
+
+    <view class="card" wx:for="{{recycleBin}}" wx:key="id">
+      <view class="recycle-header">
+        <view class="recycle-title">{{item.type === 'batch_file' ? '批量文件' : '盘点单'}}：{{item.data.name}}</view>
+        <view class="recycle-time">{{item.deletedAt}}</view>
+      </view>
+      <view class="recycle-actions">
+        <view class="btn-secondary small" bindtap="restore" data-id="{{item.id}}">恢复</view>
+      </view>
+    </view>
+
+    <view wx:if="{{recycleBin.length > 0}}" class="btn-secondary" bindtap="clearRecycle" style="margin-top: 20rpx;">清空回收站</view>
+  </view>
+</view>
