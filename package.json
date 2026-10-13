@@ -1,0 +1,12 @@
+{
+  "name": "inventory-wxapp",
+  "version": "1.0.0",
+  "description": "光伏运维辅助微信小程序",
+  "private": true,
+  "scripts": {
+    "upload": "node scripts/upload.js"
+  },
+  "devDependencies": {
+    "miniprogram-ci": "^2.1.31"
+  }
+}
