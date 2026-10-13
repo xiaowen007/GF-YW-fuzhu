@@ -1,0 +1,25 @@
+<view class="container">
+  <view class="card">
+    <view class="section-title">标签 A</view>
+    <view class="compare-input">
+      <input type="text" placeholder="扫描或输入标签 A" value="{{labelA}}" bindinput="onInputA"/>
+      <view class="scan-btn" bindtap="scanA">扫码</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">标签 B</view>
+    <view class="compare-input">
+      <input type="text" placeholder="扫描或输入标签 B" value="{{labelB}}" bindinput="onInputB"/>
+      <view class="scan-btn" bindtap="scanB">扫码</view>
+    </view>
+  </view>
+
+  <view class="compare-result {{match === true ? 'match' : match === false ? 'mismatch' : ''}}" wx:if="{{match !== null}}">
+    <view class="result-icon">{{match ? '✓' : '✕'}}</view>
+    <view class="result-text">{{match ? '标签一致' : '标签不一致'}}</view>
+  </view>
+
+  <view class="btn-primary" bindtap="compare">开始比对</view>
+  <view class="btn-secondary" bindtap="reset" style="margin-top: 20rpx;">重置</view>
+</view>
