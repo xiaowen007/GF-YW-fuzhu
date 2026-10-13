@@ -1,0 +1,9 @@
+{
+  "name": "ai-material",
+  "version": "1.0.0",
+  "description": "物料查询 · AI 识图：调用视觉大模型识别物料照片，输出结构化物料字段",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}
