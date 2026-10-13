@@ -1,0 +1,136 @@
+<view class="container" wx:if="{{material}}">
+
+  <!-- 头部信息 -->
+  <view class="card detail-head">
+    <view class="detail-head__name">{{material.name || material.model || '未命名物料'}}</view>
+    <view class="detail-head__code">
+      <text class="detail-head__code-label">物料号</text>
+      <text class="detail-head__code-value">{{material.code}}</text>
+    </view>
+    <view class="detail-head__tags">
+      <text wx:if="{{material.series}}" class="mq-tag mq-tag--primary">{{material.series}}</text>
+      <text wx:if="{{material.mtype}}" class="mq-tag mq-tag--info">{{material.mtype}}</text>
+      <text wx:if="{{material.location}}" class="mq-tag mq-tag--gray">📍 {{material.location}}</text>
+      <text wx:if="{{material.brand}}" class="mq-tag mq-tag--gray">{{material.brand}}</text>
+    </view>
+  </view>
+
+  <!-- 照片：正品参照 / 异常对照 -->
+  <view class="card">
+    <view class="section-head">
+      <text class="section-title">照片对照</text>
+      <text class="section-more" wx:if="{{photoTab === 'real' ? realPhotos.length : fakePhotos.length}}">
+        {{photoTab === 'real' ? realPhotos.length : fakePhotos.length}} 张
+      </text>
+    </view>
+
+    <view class="photo-tabs">
+      <view
+        class="photo-tab {{photoTab === 'real' ? 'photo-tab--active' : ''}}"
+        bindtap="switchPhotoTab"
+        data-tab="real"
+      >正品参照 {{realPhotos.length}}</view>
+      <view
+        class="photo-tab {{photoTab === 'fake' ? 'photo-tab--active' : ''}}"
+        bindtap="switchPhotoTab"
+        data-tab="fake"
+      >异常对照 {{fakePhotos.length}}</view>
+    </view>
+
+    <swiper
+      wx:if="{{photoTab === 'real' ? realPhotos.length : fakePhotos.length}}"
+      class="photo-swiper"
+      indicator-dots="{{true}}"
+      autoplay="{{false}}"
+      circular
+    >
+      <swiper-item wx:for="{{photoTab === 'fake' ? fakePhotos : realPhotos}}" wx:key="*this">
+        <image
+          class="photo-swiper__img"
+          src="{{item}}"
+          mode="aspectFill"
+          bindtap="previewImage"
+          data-src="{{item}}"
+        />
+      </swiper-item>
+    </swiper>
+
+    <view wx:else class="photo-empty">
+      {{photoTab === 'real' ? '暂无正品照片，维护员可在编辑页上传' : '暂无异常照片'}}
+    </view>
+
+    <view wx:if="{{fakePhotos.length && photoTab === 'real'}}" class="photo-hint">
+      ⚠️ 该物料有 {{fakePhotos.length}} 张异常对照照片，可与实物比对验真
+    </view>
+  </view>
+
+  <!-- 判定要点 -->
+  <view wx:if="{{material.remark}}" class="card">
+    <view class="section-head">
+      <text class="section-title">判定要点</text>
+    </view>
+    <view class="remark-body">{{material.remark}}</view>
+  </view>
+
+  <!-- 字段表 -->
+  <view class="card">
+    <view class="section-head">
+      <text class="section-title">物料信息</text>
+    </view>
+    <view class="field-table">
+      <view class="field-row" wx:if="{{material.model}}">
+        <text class="field-row__label">型号</text>
+        <text class="field-row__value">{{material.model}}</text>
+      </view>
+      <view class="field-row" wx:if="{{material.series}}">
+        <text class="field-row__label">系列</text>
+        <text class="field-row__value">{{material.series}}</text>
+      </view>
+      <view class="field-row" wx:if="{{material.mtype}}">
+        <text class="field-row__label">类型</text>
+        <text class="field-row__value">{{material.mtype}}</text>
+      </view>
+      <view class="field-row" wx:if="{{material.unit}}">
+        <text class="field-row__label">单位</text>
+        <text class="field-row__value">{{material.unit}}</text>
+      </view>
+      <view class="field-row" wx:if="{{material.location}}">
+        <text class="field-row__label">存放位置</text>
+        <text class="field-row__value">{{material.location}}</text>
+      </view>
+      <view class="field-row" wx:if="{{material.stock}}">
+        <text class="field-row__label">库存</text>
+        <text class="field-row__value">{{material.stock}}</text>
+      </view>
+      <view class="field-row" wx:if="{{material.brand}}">
+        <text class="field-row__label">品牌</text>
+        <text class="field-row__value">{{material.brand}}</text>
+      </view>
+      <view class="field-row" wx:if="{{material.price}}">
+        <text class="field-row__label">价格</text>
+        <text class="field-row__value">{{material.price}}</text>
+      </view>
+      <view class="field-row" wx:if="{{material.group}}">
+        <text class="field-row__label">物料组</text>
+        <text class="field-row__value">{{material.group}}</text>
+      </view>
+      <view class="field-row" wx:if="{{material.subCategory}}">
+        <text class="field-row__label">二级分类</text>
+        <text class="field-row__value">{{material.subCategory}}</text>
+      </view>
+      <view class="field-row">
+        <text class="field-row__label">更新时间</text>
+        <text class="field-row__value">{{material.updatedAt}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作区 -->
+  <view class="action-bar">
+    <view class="action-bar__btn action-bar__btn--fav {{favorited ? 'action-bar__btn--faved' : ''}}" bindtap="toggleFavorite">
+      {{favorited ? '★ 已收藏' : '☆ 收藏'}}
+    </view>
+    <view wx:if="{{canWrite}}" class="btn-primary action-bar__btn" bindtap="editMaterial">编辑物料</view>
+    <view wx:if="{{canWrite}}" class="action-bar__btn action-bar__btn--danger" bindtap="deleteMaterial">删除</view>
+  </view>
+</view>
