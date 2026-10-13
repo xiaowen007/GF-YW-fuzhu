@@ -1,0 +1,30 @@
+# 依赖
+node_modules/
+cloudfunctions/*/node_modules/
+
+# 密钥与敏感配置
+*.key
+private.key
+config.json
+.env
+.env.*
+
+# 系统与编辑器
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# 日志与临时文件
+*.log
+.tmp/
+.playwright-cli/
+admin-*.png
+
+# 小程序开发者工具本地缓存
+project.private.config.json
+
+# 说明：web/assets/app-bundle.js 是构建产物但需要提交，
+# 因为 Cloudflare Pages 部署时不会执行 npm 构建步骤，缺它则后台不可用。
+# 改动 utils/ 后请本地执行 node scripts/build-web-bundle.js 并一起提交。
