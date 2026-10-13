@@ -1,0 +1,209 @@
+<view class="container">
+
+  <!-- 搜索区 -->
+  <view class="card search-card">
+    <view class="search-bar">
+      <view class="search-bar__icon">🔍</view>
+      <input
+        class="search-bar__input"
+        value="{{keyword}}"
+        placeholder="物料号 / 名称 / 型号，如 1980004179、NXB、断路器、dlq"
+        placeholder-class="search-bar__placeholder"
+        confirm-type="search"
+        bindinput="onKeywordInput"
+        bindconfirm="submitSearch"
+      />
+      <view wx:if="{{keyword}}" class="search-bar__clear" bindtap="onClearKeyword">✕</view>
+    </view>
+    <view class="search-card__actions">
+      <view class="btn-primary search-card__btn" bindtap="submitSearch">搜索</view>
+      <view class="btn-secondary search-card__btn" bindtap="scanCode">📷 扫码查物料</view>
+      <view class="btn-ai search-card__btn" bindtap="openImageQuery">🤖 AI 识图</view>
+    </view>
+    <view class="search-card__hint">支持拼音全拼 / 首字母、同义词（空开=断路器）、多关键词空格分隔</view>
+  </view>
+
+  <!-- 搜索历史 -->
+  <view wx:if="{{searchHistory.length}}" class="card history-card">
+    <view class="section-head">
+      <text class="section-title">最近搜索</text>
+      <text class="section-more" bindtap="clearHistory">清空</text>
+    </view>
+    <view class="chip-row">
+      <view
+        wx:for="{{searchHistory}}"
+        wx:key="*this"
+        class="chip chip--ghost"
+        hover-class="chip--hover"
+        bindtap="openHistoryItem"
+        data-keyword="{{item}}"
+      >{{item}}</view>
+    </view>
+  </view>
+
+  <!-- 实时命中预览 -->
+  <view wx:if="{{showPreview}}" class="card preview-card">
+    <view class="preview-card__head">
+      <text class="preview-card__title">命中 {{previewTotal}} 条</text>
+      <text class="preview-card__more" bindtap="submitSearch">查看全部 ›</text>
+    </view>
+    <material-card
+      wx:for="{{preview}}"
+      wx:key="id"
+      item="{{item}}"
+      bindselect="onPreviewTap"
+    />
+    <view wx:if="{{previewTotal === 0}}" class="preview-card__empty">没有匹配的物料，换个关键词试试</view>
+  </view>
+
+  <!-- 数据概览 -->
+  <view class="card stat-card">
+    <view class="stat-card__item">
+      <view class="stat-card__num">{{totalCount}}</view>
+      <view class="stat-card__label">物料</view>
+    </view>
+    <view class="stat-card__divider"></view>
+    <view class="stat-card__item">
+      <view class="stat-card__num">{{photoCount}}</view>
+      <view class="stat-card__label">照片</view>
+    </view>
+    <view class="stat-card__divider"></view>
+    <view class="stat-card__item">
+      <view class="stat-card__num">{{favoriteCount}}</view>
+      <view class="stat-card__label">收藏</view>
+    </view>
+    <view class="stat-card__role">{{roleText}}</view>
+  </view>
+
+  <!-- 按系列浏览 -->
+  <view wx:if="{{series.length}}" class="card">
+    <view class="section-head">
+      <text class="section-title">按系列浏览</text>
+      <text class="section-more" bindtap="openAll">全部物料 ›</text>
+    </view>
+    <scroll-view scroll-x class="chip-scroll" enhanced show-scrollbar="{{false}}">
+      <view class="chip-row">
+        <view
+          wx:for="{{series}}"
+          wx:key="name"
+          class="chip"
+          hover-class="chip--hover"
+          bindtap="browseSeries"
+          data-name="{{item.name}}"
+        >
+          <text class="chip__name">{{item.name}}</text>
+          <text class="chip__count">{{item.count}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 按类型浏览 -->
+  <view wx:if="{{types.length}}" class="card">
+    <view class="section-head">
+      <text class="section-title">按类型浏览</text>
+    </view>
+    <scroll-view scroll-x class="chip-scroll" enhanced show-scrollbar="{{false}}">
+      <view class="chip-row">
+        <view
+          wx:for="{{types}}"
+          wx:key="name"
+          class="chip chip--info"
+          hover-class="chip--hover"
+          bindtap="browseType"
+          data-name="{{item.name}}"
+        >
+          <text class="chip__name">{{item.name}}</text>
+          <text class="chip__count">{{item.count}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 最近查看 -->
+  <view wx:if="{{recent.length}}" class="card">
+    <view class="section-head">
+      <text class="section-title">最近查看</text>
+    </view>
+    <scroll-view scroll-x class="recent-scroll" enhanced show-scrollbar="{{false}}">
+      <view class="recent-row">
+        <view
+          wx:for="{{recent}}"
+          wx:key="id"
+          class="recent-item"
+          hover-class="recent-item--hover"
+          bindtap="openRecent"
+          data-id="{{item.id}}"
+        >
+          <image wx:if="{{item.cover}}" class="recent-item__img" src="{{item.cover}}" mode="aspectFill" />
+          <view wx:else class="recent-item__img recent-item__img--empty">📦</view>
+          <view class="recent-item__name">{{item.name || item.model}}</view>
+          <view class="recent-item__code">{{item.code}}</view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 快捷入口 -->
+  <view class="card">
+    <view class="section-head">
+      <text class="section-title">常用入口</text>
+    </view>
+    <view class="entry-list">
+      <view class="entry-item" hover-class="entry-item--hover" bindtap="openImageQuery">
+        <view class="entry-item__icon entry-item__icon--ai">🤖</view>
+        <view class="entry-item__body">
+          <view class="entry-item__title">AI 识图查询</view>
+          <view class="entry-item__desc">拍照 / 选图，AI 读出物料号与型号</view>
+        </view>
+        <view class="entry-item__arrow">›</view>
+      </view>
+      <view class="entry-item" hover-class="entry-item--hover" bindtap="openFavorites">
+        <view class="entry-item__icon entry-item__icon--warning">★</view>
+        <view class="entry-item__body">
+          <view class="entry-item__title">我的收藏</view>
+          <view class="entry-item__desc">已收藏 {{favoriteCount}} 条物料</view>
+        </view>
+        <view class="entry-item__arrow">›</view>
+      </view>
+      <view class="entry-item" hover-class="entry-item--hover" bindtap="openAll">
+        <view class="entry-item__icon entry-item__icon--primary">☰</view>
+        <view class="entry-item__body">
+          <view class="entry-item__title">全部物料</view>
+          <view class="entry-item__desc">支持筛选与分页浏览</view>
+        </view>
+        <view class="entry-item__arrow">›</view>
+      </view>
+      <view wx:if="{{canWrite}}" class="entry-item" hover-class="entry-item--hover" bindtap="createMaterial">
+        <view class="entry-item__icon entry-item__icon--success">＋</view>
+        <view class="entry-item__body">
+          <view class="entry-item__title">新增物料</view>
+          <view class="entry-item__desc">录入物料信息并上传照片</view>
+        </view>
+        <view class="entry-item__arrow">›</view>
+      </view>
+      <view wx:if="{{canWrite}}" class="entry-item" hover-class="entry-item--hover" bindtap="openImport">
+        <view class="entry-item__icon entry-item__icon--info">⇪</view>
+        <view class="entry-item__body">
+          <view class="entry-item__title">批量导入</view>
+          <view class="entry-item__desc">Excel / CSV / JSON 粘贴导入</view>
+        </view>
+        <view class="entry-item__arrow">›</view>
+      </view>
+      <view class="entry-item" hover-class="entry-item--hover" bindtap="openAdmin">
+        <view class="entry-item__icon entry-item__icon--gray">👤</view>
+        <view class="entry-item__body">
+          <view class="entry-item__title">权限与邀请码</view>
+          <view class="entry-item__desc">激活维护员 / 负责人身份</view>
+        </view>
+        <view class="entry-item__arrow">›</view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{totalCount === 0}}" class="empty-state">
+    <view class="icon">📦</view>
+    <view>还没有物料数据</view>
+    <view class="empty-state__tip">维护员可通过「批量导入」或「新增物料」录入</view>
+  </view>
+</view>
