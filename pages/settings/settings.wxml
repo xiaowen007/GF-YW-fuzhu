@@ -1,0 +1,70 @@
+<view class="page">
+  <!-- 用户信息卡片 -->
+  <view class="user-card">
+    <view class="user-main">
+      <view class="avatar" bindtap="chooseAvatar">
+        <image wx:if="{{userInfo.avatarUrl}}" src="{{userInfo.avatarUrl}}" class="avatar-img"/>
+        <text wx:else class="avatar-default">👤</text>
+      </view>
+      <view class="user-info">
+        <view class="user-name">{{userInfo.nickName || '微信用户'}}</view>
+        <view class="user-tip">点击头像完善个人资料</view>
+      </view>
+      <view class="member-badge">免费版</view>
+    </view>
+
+    <view class="member-row">
+      <view class="member-item">
+        <view class="member-label">会员状态</view>
+        <view class="member-value">免费版</view>
+      </view>
+      <view class="member-divider"></view>
+      <view class="member-item">
+        <view class="member-label">到期时间</view>
+        <view class="member-value expired">未开通</view>
+      </view>
+    </view>
+
+    <view class="upgrade-row">
+      <view class="user-id">用户ID：{{userId}}（点击复制）</view>
+      <view class="upgrade-btn" bindtap="upgrade">开通正式版</view>
+    </view>
+  </view>
+
+  <!-- 常用设置 -->
+  <view class="menu-card">
+    <view class="menu-title">常用设置</view>
+    <view class="menu-item" wx:for="{{commonMenus}}" wx:key="key" bindtap="onMenuTap" data-item="{{item}}">
+      <view class="menu-icon" style="background: {{item.bg}};">{{item.icon}}</view>
+      <view class="menu-body">
+        <view class="menu-name">{{item.name}}</view>
+        <view class="menu-desc">{{item.desc}}</view>
+      </view>
+      <view class="menu-arrow">›</view>
+    </view>
+  </view>
+
+  <!-- 更多服务 -->
+  <view class="menu-card">
+    <view class="menu-title">更多服务</view>
+    <view class="menu-item" wx:for="{{serviceMenus}}" wx:key="key" bindtap="onMenuTap" data-item="{{item}}">
+      <view class="menu-icon" style="background: {{item.bg}};">{{item.icon}}</view>
+      <view class="menu-body">
+        <view class="menu-name">{{item.name}}</view>
+        <view class="menu-desc">{{item.desc}}</view>
+      </view>
+      <view class="menu-extra" wx:if="{{item.extra}}">{{item.extra}}</view>
+      <view class="menu-arrow" wx:if="{{!item.extra}}">›</view>
+    </view>
+  </view>
+
+  <!-- 小程序码 -->
+  <view class="qrcode-card">
+    <view class="qrcode-title">小程序码</view>
+    <view class="qrcode-desc">长按小程序码即可分享或保存，方便转发给其他人使用</view>
+    <view class="qrcode-img" bindtap="getQRCode">
+      <image wx:if="{{qrCodeUrl}}" src="{{qrCodeUrl}}" mode="aspectFit" show-menu-by-longpress/>
+      <text wx:else class="qrcode-placeholder">点击获取小程序码</text>
+    </view>
+  </view>
+</view>
