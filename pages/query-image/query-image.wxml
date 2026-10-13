@@ -1,0 +1,169 @@
+<view class="container">
+
+  <!-- 引导说明 -->
+  <view class="card intro-card">
+    <view class="intro-card__head">
+      <view class="intro-card__icon">🤖</view>
+      <view class="intro-card__body">
+        <view class="intro-card__title">AI 识图查询</view>
+        <view class="intro-card__desc">拍照或选一张物料照片，AI 自动读出物料号、名称、型号等信息，直接匹配库内物料</view>
+      </view>
+    </view>
+    <view class="intro-card__tips">
+      <text class="intro-card__tip">· 支持物料本体、铭牌、标签、条码照片</text>
+      <text class="intro-card__tip">· 识别结果可手动修正后再查询</text>
+      <text class="intro-card__tip">· 未配置云环境时也可手动填字段查询</text>
+    </view>
+  </view>
+
+  <!-- 选图 / 预览 -->
+  <view class="card picker-card">
+    <block wx:if="{{!imagePath}}">
+      <view class="picker-card__grid">
+        <view class="picker-btn" hover-class="picker-btn--hover" bindtap="chooseImage" data-source="camera">
+          <view class="picker-btn__icon">📷</view>
+          <view class="picker-btn__title">拍照识别</view>
+          <view class="picker-btn__desc">对准物料或铭牌</view>
+        </view>
+        <view class="picker-btn" hover-class="picker-btn--hover" bindtap="chooseImage" data-source="album">
+          <view class="picker-btn__icon">🖼️</view>
+          <view class="picker-btn__title">从相册选择</view>
+          <view class="picker-btn__desc">支持截图与历史照片</view>
+        </view>
+      </view>
+    </block>
+
+    <block wx:elif="{{!recognizing}}">
+      <image class="picker-card__preview" src="{{imagePath}}" mode="aspectFit" />
+      <view class="picker-card__actions">
+        <view class="btn-secondary picker-card__btn" bindtap="chooseImage" data-source="album">换一张</view>
+        <view class="btn-secondary picker-card__btn" bindtap="clearImage">清除</view>
+        <view class="btn-primary picker-card__btn" bindtap="recognize">开始识别</view>
+      </view>
+    </block>
+
+    <view wx:elif="{{recognizing}}" class="picker-card__recognizing">
+      <image class="picker-card__preview" src="{{imagePath}}" mode="aspectFit" />
+      <view class="recognizing-bar">
+        <view class="recognizing-bar__spinner"></view>
+        <text class="recognizing-bar__text">{{recognizeTip}}</text>
+      </view>
+      <view class="recognizing-bar__hint">大模型推理需要几秒到十几秒，请勿离开页面</view>
+    </view>
+  </view>
+
+  <!-- 识别结果 -->
+  <view wx:if="{{result}}" class="card result-card">
+    <view class="result-card__head">
+      <text class="section-title">识别结果</text>
+      <view class="result-card__badge {{result.confidence >= 0.7 ? 'result-card__badge--high' : 'result-card__badge--low'}}">
+        置信度 {{(result.confidence * 100).toFixed(0)}}%
+      </view>
+    </view>
+    <view wx:if="{{parseFailed}}" class="result-card__warn">
+      模型未按 JSON 返回，以下为原始文本，请人工核对后使用
+    </view>
+
+    <view class="form-row">
+      <text class="form-row__label">物料号</text>
+      <input class="form-row__input" value="{{result.code}}" placeholder="未识别到，可手动填写" data-field="code" bindinput="onFieldInput" />
+    </view>
+    <view class="form-row">
+      <text class="form-row__label">名称</text>
+      <input class="form-row__input" value="{{result.name}}" placeholder="未识别到，可手动填写" data-field="name" bindinput="onFieldInput" />
+    </view>
+    <view class="form-row">
+      <text class="form-row__label">型号</text>
+      <input class="form-row__input" value="{{result.model}}" placeholder="未识别到，可手动填写" data-field="model" bindinput="onFieldInput" />
+    </view>
+    <view class="form-row">
+      <text class="form-row__label">系列</text>
+      <input class="form-row__input" value="{{result.series}}" placeholder="未识别到，可手动填写" data-field="series" bindinput="onFieldInput" />
+    </view>
+    <view class="form-row">
+      <text class="form-row__label">类型</text>
+      <input class="form-row__input" value="{{result.mtype}}" placeholder="未识别到，可手动填写" data-field="mtype" bindinput="onFieldInput" />
+    </view>
+    <view class="form-row">
+      <text class="form-row__label">品牌</text>
+      <input class="form-row__input" value="{{result.brand}}" placeholder="未识别到，可手动填写" data-field="brand" bindinput="onFieldInput" />
+    </view>
+    <view class="form-row">
+      <text class="form-row__label">位置</text>
+      <input class="form-row__input" value="{{result.location}}" placeholder="未识别到，可手动填写" data-field="location" bindinput="onFieldInput" />
+    </view>
+
+    <view class="result-card__keywords">
+      <text class="form-row__label">检索关键词</text>
+      <view class="keyword-row">
+        <view wx:for="{{result.keywords}}" wx:key="*this" class="keyword-chip">
+          <text>{{item}}</text>
+          <text class="keyword-chip__del" data-index="{{index}}" catchtap="removeKeyword">✕</text>
+        </view>
+        <view wx:if="{{!result.keywords.length}}" class="keyword-empty">暂无，可在下方输入框补充</view>
+      </view>
+      <view class="keyword-add">
+        <input class="keyword-add__input" value="{{keywordInput}}" placeholder="补充关键词，如 10kV / 铜" bindinput="onKeywordInput" bindconfirm="addKeyword" />
+        <view class="keyword-add__btn" bindtap="addKeyword">添加</view>
+      </view>
+    </view>
+
+    <view wx:if="{{result.rawText}}" class="result-card__raw">
+      <view class="result-card__raw-head">
+        <text class="form-row__label">照片文字转录</text>
+        <text class="result-card__raw-toggle" bindtap="toggleRaw">{{showRaw ? '收起' : '展开'}}</text>
+      </view>
+      <text wx:if="{{showRaw}}" class="result-card__raw-text" user-select>{{result.rawText}}</text>
+    </view>
+
+    <view class="result-card__actions">
+      <view class="btn-primary result-card__btn" bindtap="queryMatch">查询匹配物料</view>
+      <view wx:if="{{canWrite}}" class="btn-secondary result-card__btn" bindtap="saveAsMaterial">存为新物料</view>
+    </view>
+  </view>
+
+  <!-- 预匹配结果 -->
+  <view wx:if="{{result && matchedTotal > 0}}" class="card">
+    <view class="preview-card__head">
+      <text class="preview-card__title">库内可能匹配 {{matchedTotal}} 条</text>
+      <text class="preview-card__more" bindtap="queryMatch">查看全部 ›</text>
+    </view>
+    <material-card
+      wx:for="{{matched}}"
+      wx:key="id"
+      item="{{item}}"
+      bindselect="onMatchedTap"
+    />
+  </view>
+
+  <!-- 识别历史 -->
+  <view wx:if="{{history.length}}" class="card">
+    <view class="section-head">
+      <text class="section-title">识别历史</text>
+      <text class="section-more" bindtap="clearHistory">清空</text>
+    </view>
+    <view class="history-list">
+      <view
+        wx:for="{{history}}"
+        wx:key="id"
+        class="history-item"
+        hover-class="history-item--hover"
+        bindtap="openHistory"
+        data-id="{{item.id}}"
+      >
+        <image wx:if="{{item.image}}" class="history-item__img" src="{{item.image}}" mode="aspectFill" />
+        <view wx:else class="history-item__img history-item__img--empty">📦</view>
+        <view class="history-item__body">
+          <view class="history-item__name">{{item.result.name || item.result.model || item.result.code || '未命名'}}</view>
+          <view class="history-item__meta">
+            <text wx:if="{{item.result.code}}" class="history-item__code">{{item.result.code}}</text>
+            <text class="history-item__time">{{item.time.slice(5, 16).replace('T', ' ')}}</text>
+            <text wx:if="{{item.matchedTotal}}" class="history-item__hit">命中 {{item.matchedTotal}}</text>
+          </view>
+        </view>
+        <view class="history-item__arrow">›</view>
+      </view>
+    </view>
+  </view>
+
+</view>
