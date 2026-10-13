@@ -1,0 +1,7 @@
+# Cloudflare Pages 配置
+# 说明：小程序本体需走微信平台，此处仅部署 web 预览页（web/ 目录）
+name = "inventory-wxapp"
+pages_build_output_dir = "./web"
+
+[deploy]
+workerRoute = "/web"
