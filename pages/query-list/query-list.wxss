@@ -1,0 +1,115 @@
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: var(--bg);
+  border-radius: 16rpx;
+  padding: 0 24rpx;
+  height: 88rpx;
+}
+
+.search-bar__icon {
+  font-size: 32rpx;
+  margin-right: 16rpx;
+}
+
+.search-bar__input {
+  flex: 1;
+  height: 88rpx;
+  font-size: 28rpx;
+  color: var(--text);
+}
+
+.search-bar__placeholder {
+  color: var(--text-tertiary);
+}
+
+.search-bar__clear {
+  width: 44rpx;
+  height: 44rpx;
+  line-height: 40rpx;
+  text-align: center;
+  border-radius: 50%;
+  background: var(--border);
+  color: var(--text-secondary);
+  font-size: 22rpx;
+}
+
+.filter-card__extra {
+  margin-top: 16rpx;
+  background: var(--primary-light);
+  border-radius: 12rpx;
+  padding: 10rpx 16rpx;
+}
+
+.filter-card__extra-text {
+  font-size: 22rpx;
+  color: var(--primary);
+}
+
+.filter-scroll {
+  width: 100%;
+  white-space: nowrap;
+  margin-top: 16rpx;
+}
+
+.filter-row {
+  display: inline-flex;
+  padding-bottom: 4rpx;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  background: var(--bg);
+  color: var(--text-secondary);
+  border-radius: 100rpx;
+  padding: 10rpx 24rpx;
+  margin-right: 16rpx;
+  font-size: 24rpx;
+  border: 1rpx solid transparent;
+}
+
+.filter-chip--type {
+  background: #E6F1FB;
+  color: #0C447C;
+}
+
+.filter-chip--active {
+  background: var(--primary);
+  color: #fff;
+}
+
+.filter-chip--hover {
+  opacity: 0.8;
+}
+
+.filter-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid var(--border);
+}
+
+.filter-card__total {
+  font-size: 24rpx;
+  color: var(--text-tertiary);
+}
+
+.filter-card__clear {
+  font-size: 24rpx;
+  color: var(--primary);
+}
+
+.list-foot {
+  text-align: center;
+  font-size: 24rpx;
+  color: var(--text-tertiary);
+  padding: 24rpx 0 48rpx;
+}
+
+.empty-state__tip {
+  font-size: 24rpx;
+  margin-top: 8rpx;
+}
