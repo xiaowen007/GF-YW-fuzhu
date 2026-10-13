@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html data-page-node-id="SRZNIV50l4HlDpIPlvcjl0" lang="zh-CN">
+<head data-page-node-id="OLzyHl5rZpqLSJOTf72rIL">
+<script data-page-node-id="G8d526N7PtE3PWyFTxrYi6" src="/page/page_comm/inject.js"></script>
+  <meta data-page-node-id="PEJKOaS8hfOThpoZmyVzKQ" charset="UTF-8">
+  <meta data-page-node-id="pXpEZla1iw6GWGuamud8Ol" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+  <title data-page-node-id="0A1C3VPB1L8RhhAI5TKBbX" data-pnid-children="xauAtE8JJ6imqsDUn5OWDv">光伏运维辅助 - 小程序预览</title>
+  <style data-page-node-id="mZGKpgJQH4vjGFJju7JZBE" data-pnid-children="43aPgCCQPVvOuGSvEYZYF0">
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #f5f7fa;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+    .phone {
+      width: 375px;
+      background: #fff;
+      border-radius: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      overflow: hidden;
+      position: relative;
+    }
+    .status-bar {
+      height: 44px;
+      background: #5B6CFF;
+    }
+    .nav-bar {
+      height: 44px;
+      background: #5B6CFF;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      font-weight: 500;
+      position: relative;
+    }
+    .nav-actions {
+      position: absolute;
+      right: 16px;
+      display: flex;
+      gap: 12px;
+      font-size: 18px;
+    }
+    .content {
+      background: #F5F7FA;
+      min-height: 640px;
+      padding: 16px;
+    }
+    .notice {
+      background: #fff;
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    .notice-badge {
+      background: #FFF4E6;
+      color: #FF9C00;
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      margin-right: 12px;
+      height: fit-content;
+    }
+    .notice-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 4px;
+    }
+    .notice-text {
+      font-size: 13px;
+      color: #999;
+      line-height: 1.5;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .card {
+      border-radius: 18px;
+      padding: 18px;
+      color: #fff;
+      min-height: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card-icon { font-size: 28px; margin-bottom: 8px; }
+    .card-title { font-size: 17px; font-weight: 600; }
+    .card-desc { font-size: 12px; opacity: 0.85; margin-top: 4px; }
+    .generate-card {
+      background: #EEF5FF;
+      border-radius: 18px;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 80px;
+    }
+    .generate-icon {
+      width: 48px;
+      height: 48px;
+      background: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-right: 14px;
+    }
+    .generate-title { font-size: 16px; font-weight: 600; color: #333; margin-bottom: 4px; }
+    .generate-desc { font-size: 13px; color: #888; }
+    .generate-arrow { margin-left: auto; color: #bbb; font-size: 24px; }
+    .tab-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: #fff;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      border-top: 1px solid #f0f0f0;
+      padding-bottom: 10px;
+    }
+    .tab { text-align: center; color: #999; }
+    .tab.active { color: #5B6CFF; }
+    .tab-icon { font-size: 24px; margin-bottom: 2px; }
+    .tab-text { font-size: 11px; }
+    .category-card {
+      background: linear-gradient(135deg, #5B6CFF 0%, #7A5BFF 100%);
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 24px rgba(91,108,255,0.28);
+      color: #fff;
+    }
+    .category-head { display: flex; align-items: center; }
+    .category-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; flex-shrink: 0;
+    }
+    .category-body { flex: 1; min-width: 0; margin-left: 12px; }
+    .category-title { font-size: 19px; font-weight: 600; display: flex; align-items: center; }
+    .category-badge {
+      font-size: 10px; font-weight: 400; background: rgba(255,255,255,0.22);
+      border-radius: 5px; padding: 2px 7px; margin-left: 8px;
+    }
+    .category-desc { font-size: 12px; opacity: 0.85; margin-top: 4px; }
+    .category-arrow { font-size: 26px; opacity: 0.7; margin-left: 8px; }
+    .category-stats {
+      display: flex; align-items: center; margin-top: 14px; padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.18);
+    }
+    .category-stat { text-align: center; margin-right: 28px; }
+    .category-num { font-size: 20px; font-weight: 600; display: block; }
+    .category-label { font-size: 10px; opacity: 0.8; display: block; }
+    .category-quick { margin-left: auto; display: flex; }
+    .category-quick-item {
+      font-size: 11px; background: rgba(255,255,255,0.2);
+      border-radius: 999px; padding: 4px 12px; margin-left: 8px;
+    }
+    .screens {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+      width: 100%;
+    }
+    .screen { flex-shrink: 0; }
+    .screen-label {
+      width: 375px;
+      text-align: center;
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+    .mq-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    .mq-search {
+      display: flex; align-items: center; background: #F5F7FA; border-radius: 12px;
+      height: 46px; padding: 0 14px; font-size: 13px; color: #999;
+    }
+    .mq-actions { display: flex; margin-top: 10px; }
+    .mq-btn { flex: 1; text-align: center; border-radius: 10px; font-size: 13px; line-height: 34px; }
+    .mq-btn-p { background: #5B6CFF; color: #fff; margin-right: 8px; }
+    .mq-btn-s { background: #EEF0FF; color: #5B6CFF; }
+    .mq-stats { display: flex; align-items: center; }
+    .mq-stat { flex: 1; text-align: center; }
+    .mq-stat-num { font-size: 22px; font-weight: 600; color: #5B6CFF; }
+    .mq-stat-label { font-size: 10px; color: #999; }
+    .mq-sec-title { font-size: 15px; font-weight: 500; color: #333; margin-bottom: 10px; }
+    .mq-chips { display: flex; flex-wrap: wrap; }
+    .mq-chip {
+      background: #EEF0FF; color: #5B6CFF; border-radius: 999px;
+      font-size: 11px; padding: 3px 12px; margin: 0 8px 8px 0;
+    }
+    .mq-chip-i { background: #E6F1FB; color: #0C447C; }
+    .mq-row-card {
+      display: flex; align-items: flex-start; border: 1px solid #f2f2f2;
+      border-radius: 12px; padding: 10px; margin-bottom: 10px;
+    }
+    .mq-form-row {
+      display: flex;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #EEE;
+    }
+    .mq-form-label {
+      width: 56px;
+      font-size: 12px;
+      color: #666;
+      flex-shrink: 0;
+    }
+    .mq-form-input {
+      flex: 1;
+      min-width: 0;
+      height: 30px;
+      font-size: 12px;
+      color: #333;
+      background: #F5F7FA;
+      border-radius: 8px;
+      padding: 0 10px;
+      border: none;
+      outline: none;
+    }
+
+    .mq-thumb {
+      width: 84px; height: 84px; border-radius: 10px; background: #F5F7FA; flex-shrink: 0;
+    }
+    .mq-info { flex: 1; min-width: 0; margin-left: 12px; }
+    .mq-name { font-size: 15px; font-weight: 500; color: #333; line-height: 1.35; }
+    .mq-meta { margin-top: 4px; font-size: 12px; color: #666; }
+    .mq-code { font-family: Menlo, Consolas, monospace; letter-spacing: 0.5px; }
+    .mq-tags { margin-top: 6px; display: flex; flex-wrap: wrap; }
+    .mq-tag { font-size: 10px; line-height: 1.7; padding: 1px 8px; border-radius: 5px; margin: 2px 6px 0 0; }
+    .mq-tag-p { background: #EEF0FF; color: #5B6CFF; }
+    .mq-tag-i { background: #E6F1FB; color: #0C447C; }
+    .mq-tag-g { background: #F5F7FA; color: #666; }
+    .mq-tag-d { background: #FCEBEB; color: #FF5B5B; }
+    .mq-entries { display: flex; flex-direction: column; }
+    .mq-entry { display: flex; align-items: center; padding: 9px 0; border-bottom: 1px solid #f2f2f2; }
+    .mq-entry:last-child { border-bottom: none; }
+    .mq-entry-ic {
+      width: 32px; height: 32px; border-radius: 9px; color: #fff; font-size: 15px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .mq-entry-body { flex: 1; min-width: 0; margin-left: 10px; }
+    .mq-entry-title { font-size: 13px; color: #333; }
+    .mq-entry-desc { font-size: 10px; color: #999; margin-top: 1px; }
+    .mq-entry-arrow { color: #ccc; font-size: 18px; }
+  </style>
+</head>
+<body data-page-node-id="voOW6lSCArk8FgbXN34MGZ">
+  <div class="screens">
+    <div class="screen">
+
+      <div class="screen-label">光伏运维辅助 · 首页</div>
+
+    <div data-page-node-id="jIUqAUBGngWfPCEGJdiV05" class="phone">
+    <div data-page-node-id="3TnP59tgyqrIhg64PboxNx" class="status-bar"></div>
+    <div data-page-node-id="yf8RwnEsaX5eNZd6ChTSLM" class="nav-bar"><!--pnid:wIimoGavMTAdeJHvg4ohyO-->
+      首页
+      <div data-page-node-id="vELaFZxZJaLHECNWTXvY16" class="nav-actions"><!--pnid:gltFB4oeb7dLnoeBAV2YMD-->⋯ − ⦿</div>
+    </div>
+    <div data-page-node-id="MHR91h9Hd6y4T9SXiXgH8C" class="content">
+      <div data-page-node-id="VLxuDc5USHDWmzGr8wgJiW" class="notice">
+        <div data-page-node-id="O2drK6BCSU0S0C8TmATPzj" class="notice-badge"><!--pnid:mRqceGH3dRibovgE0Xl3PB-->公告</div>
+        <div data-page-node-id="wEYR76LiXJPD6OJ8W0yhvf">
+          <div data-page-node-id="3iwscsPizmpsYP0ZwuZOQX" class="notice-title"><!--pnid:2uGYIYp2SA6Rd3cQ3wmqLV-->V2.7.0 新版本发布</div>
+          <div data-page-node-id="N4FOIT4MzeVkHDYPdYuz8T" class="notice-text"><!--pnid:T5fAk2yBEMo9LJx71LtsDy-->新增「物料查询」工具分类：扫码搜物料、AI 识图查询、正品/异常照片验真、收藏与批量导入维护。</div>
+        </div>
+      </div>
+
+            <div class="category-card">
+        <div class="category-head">
+          <div class="category-icon">🔍</div>
+          <div class="category-body">
+            <div class="category-title">物料查询<span class="category-badge">工具分类</span></div>
+            <div class="category-desc">扫码搜物料 · AI 识图 · 正品/异常照片验真 · 批量导入维护</div>
+          </div>
+          <div class="category-arrow">›</div>
+        </div>
+        <div class="category-stats">
+          <div class="category-stat"><span class="category-num">14</span><span class="category-label">物料</span></div>
+          <div class="category-stat"><span class="category-num">15</span><span class="category-label">照片</span></div>
+          <div class="category-quick">
+            <span class="category-quick-item">AI 识图</span>
+            <span class="category-quick-item">我的收藏</span>
+            <span class="category-quick-item">批量导入</span>
+          </div>
+        </div>
+      </div>
+
+<div data-page-node-id="5wOHtBSMX1OOTlHnpbLEVm" class="grid">
+        <div data-page-node-id="WAnVKaXEDTf0waV9kP7fCl" class="card" style="background:linear-gradient(135deg, #C56BF3 0%, #9A4DFF 100%)">
+          <div data-page-node-id="aNypDbtWdWPoe7Eh3HZ3qa" class="card-icon"><!--pnid:nPZG5UypMqRWLKfeGzmJz4-->⊞</div>
+          <div data-page-node-id="85KxdsRr1jr04fvnwLt6XP">
+            <div data-page-node-id="mU3HLmryoTXf6nNFL7MLZU" class="card-title"><!--pnid:VKf6s72mpLwfyTUjoeuwto-->单次扫码</div>
+            <div data-page-node-id="KjcDIJEmYAXdEXlirUvvkn" class="card-desc"><!--pnid:REwMMKktWn2Sw1FrwNoSfT-->识别后进入详情</div>
+          </div>
+        </div>
+        <div data-page-node-id="If7M1aCZWehDJwRz4R0Yh0" class="card" style="background:linear-gradient(135deg, #00C853 0%, #009624 100%)">
+          <div data-page-node-id="QDYgoChyUuzbVVuOo8LGJA" class="card-icon"><!--pnid:x7EkamHgTIkn3B7CKotqZF-->⇄</div>
+          <div data-page-node-id="3T6hHwYqF8zotTiOFiaiS8">
+            <div data-page-node-id="dx49O3KK69nvwjOr9kBimo" class="card-title"><!--pnid:rjGcyaVTf9OAGFmw0XDZoD-->连续扫码</div>
+            <div data-page-node-id="yAeLUDKPNQBcICrlUwmDsz" class="card-desc"><!--pnid:2yap1zk1RTvAB9JpSCrn97-->适合高频操作</div>
+          </div>
+        </div>
+        <div data-page-node-id="VddTZJGWRG3Yq58uhy0PSi" class="card" style="background:linear-gradient(135deg, #FFB300 0%, #FF8F00 100%)">
+          <div data-page-node-id="2ksn1A2N5nz39nf0HMUwUJ" class="card-icon"><!--pnid:bEKjo8YtAIOEc3laKc3lGC-->∞</div>
+          <div data-page-node-id="bRLkCM0VZtzE6eKmSKUeNz">
+            <div data-page-node-id="Ggj2231oHLJUVsdQ7Li8Iq" class="card-title"><!--pnid:0VMzU7mYp2vw1nSQyfEZ1E-->标签比对</div>
+            <div data-page-node-id="rxZ9bDCxJlQaLERydqnqLO" class="card-desc"><!--pnid:wTRDqIw3ZdlWDmS8cjQmLo-->双标签自动比对</div>
+          </div>
+        </div>
+        <div data-page-node-id="vVw4wz3EHaN3GMsr0iTav2" class="card" style="background:linear-gradient(135deg, #29B6F6 0%, #0288D1 100%)">
+          <div data-page-node-id="pYoINyoLHcRPzrjJY00O0M" class="card-icon"><!--pnid:9o51orHcjXQEokiaYzd6Du-->✉</div>
+          <div data-page-node-id="XAyD7pVKGbdgBmaS7Xm2Vs">
+            <div data-page-node-id="jlh6YH1e7iZ9BU5HtYuaMW" class="card-title"><!--pnid:hWLrWnjPu9bw4CEscWhk1n-->图片批量解码</div>
+            <div data-page-node-id="FTKulhKdDs6KDu2UC1c6tN" class="card-desc"><!--pnid:iz9DMYStQuEa8n4hTGvWcH-->导入图片识别</div>
+          </div>
+        </div>
+        <div data-page-node-id="pWgYxKZTbQ7WaOA40mR2fK" class="card" style="background:linear-gradient(135deg, #26A69A 0%, #00897B 100%)">
+          <div data-page-node-id="QbJ367xl1kgQnmfMDVxHhq" class="card-icon"><!--pnid:SleKSYEL9AuWup0y91VkJf-->▤</div>
+          <div data-page-node-id="IOu2NR4QQ3Glwc7ArN3knD">
+            <div data-page-node-id="G39fJnqtuhE7x4L9dv7VWl" class="card-title"><!--pnid:eg82xtBrU0FVvbNf25QeQY-->扫码累加</div>
+            <div data-page-node-id="bO3xTeUKWI4uBlMDR2u5Yt" class="card-desc"><!--pnid:9K2IwYsxksvvIKK6WqbMpM-->重量数量金额汇总</div>
+          </div>
+        </div>
+        <div data-page-node-id="HRvB1Ka9FFqyZmpMf5IL6r" class="card" style="background:linear-gradient(135deg, #78909C 0%, #546E7A 100%)">
+          <div data-page-node-id="Jznz2HDjaS8UJ3Sn96zagO" class="card-icon"><!--pnid:T6HSP3ZZKkwjcGzLiGI9Dt-->☰</div>
+          <div data-page-node-id="niDxInkm0O3bVFdN85SVKL">
+            <div data-page-node-id="wKY7jUOzG5ODdNz7RdADq0" class="card-title"><!--pnid:Lwfj2lfW81M19aOoTQbBDY-->单次扫码记录</div>
+            <div data-page-node-id="AVhsgCLfwOHmIpnvIJ2p57" class="card-desc"><!--pnid:ssycPg1r0bramoyLXkNci9-->查看单次扫码历史</div>
+          </div>
+        </div>
+        <div data-page-node-id="BYjiYCUUpbNqfB8G2lBGkM" class="card" style="background:linear-gradient(135deg, #7C4DFF 0%, #536DFE 100%)">
+          <div data-page-node-id="6t9SbVg38XxeF57c4Ck1cY" class="card-icon"><!--pnid:rG1ko8nXcrw5G9yXT9oQNt-->▌</div>
+          <div data-page-node-id="cOIPqPUDVnCA8fi5pLscMG">
+            <div data-page-node-id="F4CaGl5wGLO9l4iH3qJFRZ" class="card-title"><!--pnid:SlSA6glYYcOT1M2aCEBNUp-->条形码生成</div>
+            <div data-page-node-id="osKnUHGcfXZl75iaQG7tPJ" class="card-desc"><!--pnid:2u60ZvIoAxp6Xwp8LZm1vq-->支持自定义内容</div>
+          </div>
+        </div>
+        <div data-page-node-id="BzmJ7Ok6WfFsPnrhGMcZ2j" class="card" style="background:linear-gradient(135deg, #FF6E40 0%, #FF3D00 100%)">
+          <div data-page-node-id="LHd56IcLLiNwNDfWt5WKCw" class="card-icon"><!--pnid:CQ6DYS69CdeibUHiDEd2K6-->⊕</div>
+          <div data-page-node-id="70XwGkUDzvD94b5885tZ8w">
+            <div data-page-node-id="sAbxhR5e1JcyOO0jAf2G7W" class="card-title"><!--pnid:SahELeDXAoDHQMqw0GEY3q-->二维码生成</div>
+            <div data-page-node-id="9SNgBz9URqc8y3vt4oZblV" class="card-desc"><!--pnid:R2dekzSp6h4YYJ89KeM6YV-->适合链接与文本</div>
+          </div>
+        </div>
+      </div>
+
+      <div data-page-node-id="p4J1zx9LlsgVePmlVRLTXH" class="generate-card">
+        <div data-page-node-id="2pp9tS9GxmhigRhvbh3nzK" class="generate-icon"><!--pnid:TM1i8kn7QUovE31NNAITii-->📝</div>
+        <div data-page-node-id="PqYneFLzUlCb5zehVWnfFQ">
+          <div data-page-node-id="ugk4siojH2WbedwD1KIKb0" class="generate-title"><!--pnid:PgG1iT14ESDsdrRRCRyp5V-->生成记录</div>
+          <div data-page-node-id="4l8NEewMsykdK3j0hL99J1" class="generate-desc"><!--pnid:Ce6uHoGrXbZeYNBujau4Ex-->查看已生成的条形码和二维码历史</div>
+        </div>
+        <div data-page-node-id="oWbJy1vzCu2JBj7sSC0kvD" class="generate-arrow"><!--pnid:c01BE7HYPXz7QdiDuQbUaH-->›</div>
+      </div>
+    </div>
+
+    <div data-page-node-id="XXk8YKJIwLt6A4vljZZ0Sj" class="tab-bar">
+      <div data-page-node-id="PaRC6nu7lQSDGTNqGm1VAd" class="tab active">
+        <div data-page-node-id="UuEQmGmv31h5yCxwzw4PQI" class="tab-icon"><!--pnid:lqr9ip3O7NaZp2lUIphYc2-->⊞</div>
+        <div data-page-node-id="R7i2FQviWNnl0Dq4OuNn2e" class="tab-text"><!--pnid:8Q4q8WJqQ929RNiWEW1LiT-->首页</div>
+      </div>
+      <div data-page-node-id="0uJpF8zIQvYZ0WJ8ebvEix" class="tab">
+        <div data-page-node-id="uMw5tiy4QsHc2g6X0jBZi8" class="tab-icon"><!--pnid:I7hthWAsH7nXIFHRc9Vi9e-->▦</div>
+        <div data-page-node-id="DmvkttvBqTjbSYgCqh19w9" class="tab-text"><!--pnid:6zjAD0IktnuZw3CJPPkZbO-->批量扫码</div>
+      </div>
+      <div data-page-node-id="6nXBzYpvUYCkk3kZsxUxWk" class="tab">
+        <div data-page-node-id="ly561FyDV0dCfroX89nyV0" class="tab-icon"><!--pnid:JSrgWOYShB2q69GepP3kzM-->▤</div>
+        <div data-page-node-id="DnW3jHEiHj2XhBaXXXL8Sn" class="tab-text"><!--pnid:TErA5myqyDvD2E9JtrJsVC-->盘点</div>
+      </div>
+      <div data-page-node-id="FLLXQ3x6rXK4kWkx7Ij2Dx" class="tab">
+        <div data-page-node-id="DutSzdXGvinu8EjeN2pEfM" class="tab-icon"><!--pnid:jt0DT5d12VbtlVk83TG6pg-->⚙</div>
+        <div data-page-node-id="0lx0fenuCI1fGUVrruxbDD" class="tab-text"><!--pnid:Hk7L9aT7UNl8CqnVoujBHw-->设置</div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="screen">
+    <div class="screen-label">物料查询 · 查询首页</div>
+    <div class="phone">
+      <div class="status-bar"></div>
+      <div class="nav-bar">物料查询</div>
+      <div class="content">
+        <div class="mq-card">
+          <div class="mq-search">🔍  物料号 / 名称 / 型号，如 1980004179</div>
+          <div class="mq-actions">
+            <div class="mq-btn mq-btn-p">搜索</div>
+            <div class="mq-btn mq-btn-s">📷 扫码查物料</div>
+          </div>
+        </div>
+
+        <div class="mq-card">
+          <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+            <text style="font-size:12px;color:#666;">命中 14 条</text>
+            <text style="font-size:12px;color:#5B6CFF;">查看全部 ›</text>
+          </div>
+          <div class="mq-row-card">
+            <image class="mq-thumb" src="assets/materials/1980004179_c9_image1.jpg" mode="aspectFill"></image>
+            <div class="mq-info">
+              <div class="mq-name">断路器NXB-125 4P C100（安能专供）</div>
+              <div class="mq-meta"><text class="mq-code">1980004179</text> · NXB-125E/100A 4P</div>
+              <div class="mq-tags">
+                <text class="mq-tag mq-tag-p">断路器</text>
+                <text class="mq-tag mq-tag-i">NXB</text>
+                <text class="mq-tag mq-tag-d">有异常对照</text>
+              </div>
+            </div>
+            <text style="color:#FF9C00;font-size:16px;">★</text>
+          </div>
+          <div class="mq-row-card" style="margin-bottom:0;">
+            <image class="mq-thumb" src="assets/materials/1980009051_c9_image14.jpg" mode="aspectFill"></image>
+            <div class="mq-info">
+              <div class="mq-name">NBP-100 NGV E 4P C100 G290</div>
+              <div class="mq-meta"><text class="mq-code">1980009051</text> · NBP-100 NGV E 4P C100 G290</div>
+              <div class="mq-tags">
+                <text class="mq-tag mq-tag-p">重合闸</text>
+                <text class="mq-tag mq-tag-i">NBP</text>
+                <text class="mq-tag mq-tag-g">1图</text>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mq-card">
+          <div class="mq-stats">
+            <div class="mq-stat"><div class="mq-stat-num">14</div><div class="mq-stat-label">物料</div></div>
+            <div class="mq-stat"><div class="mq-stat-num">15</div><div class="mq-stat-label">照片</div></div>
+            <div class="mq-stat"><div class="mq-stat-num">0</div><div class="mq-stat-label">收藏</div></div>
+          </div>
+        </div>
+
+        <div class="mq-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <text class="mq-sec-title" style="margin-bottom:0;">按系列浏览</text>
+            <text style="font-size:11px;color:#5B6CFF;">全部物料 ›</text>
+          </div>
+          <div class="mq-chips">
+            <text class="mq-chip">断路器 13</text>
+            <text class="mq-chip">重合闸 1</text>
+          </div>
+        </div>
+
+        <div class="mq-card">
+          <div class="mq-sec-title">按类型浏览</div>
+          <div class="mq-chips">
+            <text class="mq-chip mq-chip-i">NXB 5</text>
+            <text class="mq-chip mq-chip-i">NBP 5</text>
+            <text class="mq-chip mq-chip-i">NM2LC-250/M 1</text>
+          </div>
+        </div>
+
+        <div class="mq-card">
+          <div class="mq-sec-title">常用入口</div>
+          <div class="mq-entries">
+            <div class="mq-entry">
+              <div class="mq-entry-ic" style="background:#FF9C00;">★</div>
+              <div class="mq-entry-body">
+                <div class="mq-entry-title">我的收藏</div>
+                <div class="mq-entry-desc">已收藏 0 条物料</div>
+              </div>
+              <text class="mq-entry-arrow">›</text>
+            </div>
+            <div class="mq-entry">
+              <div class="mq-entry-ic" style="background:#5B6CFF;">☐</div>
+              <div class="mq-entry-body">
+                <div class="mq-entry-title">全部物料</div>
+                <div class="mq-entry-desc">支持筛选与分页浏览</div>
+              </div>
+              <text class="mq-entry-arrow">›</text>
+            </div>
+            <div class="mq-entry">
+              <div class="mq-entry-ic" style="background:#2D9CDB;">↪</div>
+              <div class="mq-entry-body">
+                <div class="mq-entry-title">批量导入</div>
+                <div class="mq-entry-desc">Excel / CSV / JSON 粘贴导入</div>
+              </div>
+              <text class="mq-entry-arrow">›</text>
+            </div>
+            <div class="mq-entry">
+              <div class="mq-entry-ic" style="background:#909399;">👤</div>
+              <div class="mq-entry-body">
+                <div class="mq-entry-title">权限与邀请码</div>
+                <div class="mq-entry-desc">激活维护员 / 负责人身份</div>
+              </div>
+              <text class="mq-entry-arrow">›</text>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <div class="tab active"><div class="tab-icon">⊞</div><div class="tab-text">首页</div></div>
+        <div class="tab"><div class="tab-icon">▦</div><div class="tab-text">批量扫码</div></div>
+        <div class="tab"><div class="tab-icon">▤</div><div class="tab-text">盘点</div></div>
+        <div class="tab"><div class="tab-icon">⚙</div><div class="tab-text">设置</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen">
+    <div class="screen-label">物料查询 · AI 识图查询</div>
+    <div class="phone">
+      <div class="status-bar"></div>
+      <div class="nav-bar">AI 识图查询</div>
+      <div class="content">
+        <div class="mq-card">
+          <div style="display:flex;align-items:center;">
+            <div style="width:44px;height:44px;border-radius:12px;background:#EEF0FF;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🤖</div>
+            <div style="flex:1;min-width:0;margin-left:10px;">
+              <div style="font-size:14px;font-weight:600;color:#333;">AI 识图查询</div>
+              <div style="font-size:10px;color:#999;margin-top:2px;line-height:1.4;">拍照或选一张物料照片，AI 自动读出物料号、名称、型号等信息</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mq-card">
+          <div style="display:flex;">
+            <div style="flex:1;background:#F5F7FA;border-radius:10px;padding:14px 8px;text-align:center;">
+              <div style="font-size:24px;">📷</div>
+              <div style="font-size:12px;font-weight:500;color:#333;margin-top:6px;">拍照识别</div>
+              <div style="font-size:10px;color:#999;margin-top:2px;">对准物料或铭牌</div>
+            </div>
+            <div style="width:12px;"></div>
+            <div style="flex:1;background:#F5F7FA;border-radius:10px;padding:14px 8px;text-align:center;">
+              <div style="font-size:24px;">🖼️</div>
+              <div style="font-size:12px;font-weight:500;color:#333;margin-top:6px;">从相册选择</div>
+              <div style="font-size:10px;color:#999;margin-top:2px;">支持截图与历史照片</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mq-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <text style="font-size:13px;font-weight:500;color:#333;">识别结果</text>
+            <text style="font-size:10px;color:#07C160;background:rgba(7,193,96,0.12);border-radius:6px;padding:2px 8px;">置信度 88%</text>
+          </div>
+          <div class="mq-form-row"><text class="mq-form-label">物料号</text><input class="mq-form-input" value="1980001631" disabled></div>
+          <div class="mq-form-row"><text class="mq-form-label">名称</text><input class="mq-form-input" value="断路器NXB-63 4P C32 6KA 安能专供" disabled></div>
+          <div class="mq-form-row"><text class="mq-form-label">型号</text><input class="mq-form-input" value="NXB-63/C32 4P" disabled></div>
+          <div class="mq-form-row" style="border-bottom:none;"><text class="mq-form-label">品牌</text><input class="mq-form-input" value="安能" disabled></div>
+          <div style="margin-top:10px;">
+            <text style="font-size:12px;color:#666;">检索关键词</text>
+            <div style="display:flex;flex-wrap:wrap;margin-top:8px;">
+              <text style="font-size:10px;color:#5B6CFF;background:#EEF0FF;border-radius:999px;padding:3px 10px;margin:0 6px 6px 0;">断路器</text>
+              <text style="font-size:10px;color:#5B6CFF;background:#EEF0FF;border-radius:999px;padding:3px 10px;margin:0 6px 6px 0;">4P</text>
+              <text style="font-size:10px;color:#5B6CFF;background:#EEF0FF;border-radius:999px;padding:3px 10px;margin:0 6px 6px 0;">C32</text>
+              <text style="font-size:10px;color:#5B6CFF;background:#EEF0FF;border-radius:999px;padding:3px 10px;margin:0 6px 6px 0;">6KA</text>
+            </div>
+          </div>
+          <div style="display:flex;margin-top:12px;">
+            <div style="flex:1;background:#5B6CFF;color:#fff;border-radius:10px;height:36px;line-height:36px;text-align:center;font-size:12px;">查询匹配物料</div>
+            <div style="width:10px;"></div>
+            <div style="flex:1;background:#EEF0FF;color:#5B6CFF;border-radius:10px;height:36px;line-height:36px;text-align:center;font-size:12px;">存为新物料</div>
+          </div>
+        </div>
+
+        <div class="mq-card">
+          <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+            <text style="font-size:12px;color:#666;">库内可能匹配 1 条</text>
+            <text style="font-size:12px;color:#5B6CFF;">查看全部 ›</text>
+          </div>
+          <div class="mq-row-card" style="margin-bottom:0;">
+            <image class="mq-thumb" src="assets/materials/1980001631_c9_image3.jpg" mode="aspectFill"></image>
+            <div class="mq-info">
+              <div class="mq-name">断路器NXB-63 4P C32 6KA安能专供</div>
+              <div class="mq-meta"><text class="mq-code">1980001631</text> · NXB-63/C32 4P</div>
+              <div class="mq-tags">
+                <text class="mq-tag mq-tag-p">断路器</text>
+                <text class="mq-tag mq-tag-i">NXB</text>
+                <text class="mq-tag mq-tag-d">有异常对照</text>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+</body>
+</html>
