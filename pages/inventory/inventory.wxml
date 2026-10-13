@@ -1,0 +1,74 @@
+<view class="page">
+  <!-- 教程 banner -->
+  <view class="banner" bindtap="openTutorial">
+    <view class="banner-icon">📖</view>
+    <view class="banner-text">如何扫码盘点？点击查看图文教程</view>
+    <view class="banner-arrow">›</view>
+  </view>
+
+  <!-- 顶部操作按钮 -->
+  <view class="action-cards">
+    <view class="action-card orange" bindtap="goPending">
+      <view class="action-icon">🍔</view>
+      <view class="action-text">待盘数据</view>
+    </view>
+    <view class="action-card green" bindtap="goStats">
+      <view class="action-icon">📊</view>
+      <view class="action-text">盘点统计</view>
+    </view>
+  </view>
+
+  <!-- 列表头 -->
+  <view class="list-header">
+    <text class="header-tip">盘点单(左滑置顶/重命名/删除)</text>
+    <view class="sort-btn" bindtap="toggleSort">
+      <text>按创建时间排序</text>
+      <text class="sort-arrow">{{sortDesc ? '↓' : '↑'}}</text>
+    </view>
+  </view>
+
+  <!-- 盘点单列表 -->
+  <scroll-view scroll-y class="sheet-list" refresher-enabled refresher-triggered="{{refreshing}}" bindrefresherrefresh="onRefresh">
+    <view
+      class="sheet-item-wrap"
+      wx:for="{{sheets}}"
+      wx:key="id"
+      bindtouchstart="touchStart"
+      bindtouchmove="touchMove"
+      bindtouchend="touchEnd"
+      data-index="{{index}}"
+    >
+      <view class="sheet-actions" style="width: {{actionWidth}}rpx;">
+        <view class="action-btn pin" bindtap="pinSheet" data-id="{{item.id}}">置顶</view>
+        <view class="action-btn rename" bindtap="renameSheet" data-id="{{item.id}}" data-name="{{item.name}}">重命名</view>
+        <view class="action-btn delete" bindtap="deleteSheet" data-id="{{item.id}}">删除</view>
+      </view>
+      <view class="sheet-item" style="transform: translateX({{item.translateX || 0}}rpx);">
+        <view class="sheet-icon">📋</view>
+        <view class="sheet-info">
+          <view class="sheet-name">{{item.name}}</view>
+          <view class="sheet-meta">
+            <text class="status {{item.status}}">{{item.statusText}}</text>
+            <text>共{{item.total}}项 · 已盘{{item.scanned}}</text>
+          </view>
+        </view>
+        <view class="sheet-arrow">›</view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{sheets.length === 0}}" class="empty-state">
+      <view class="empty-icon">
+        <view class="empty-img">🖼</view>
+        <view class="empty-dot"></view>
+      </view>
+      <view class="empty-title">无任何盘点记录~</view>
+      <view class="empty-desc">点击下方按钮开始新建盘点单</view>
+    </view>
+  </scroll-view>
+
+  <!-- 悬浮加号 -->
+  <view class="fab" bindtap="createSheet">
+    <view class="fab-icon">+</view>
+  </view>
+</view>
