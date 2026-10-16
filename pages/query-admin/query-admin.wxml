@@ -144,6 +144,14 @@
         </view>
         <view class="entry-item__arrow">›</view>
       </view>
+      <view class="entry-item" hover-class="entry-item--hover" bindtap="exportMaterials">
+        <view class="entry-item__icon entry-item__icon--primary">⇩</view>
+        <view class="entry-item__body">
+          <view class="entry-item__title">导出备份</view>
+          <view class="entry-item__desc">分享完整备份，或复制文本同步到网页</view>
+        </view>
+        <view class="entry-item__arrow">›</view>
+      </view>
       <view class="entry-item" hover-class="entry-item--hover" bindtap="restoreSeed">
         <view class="entry-item__icon entry-item__icon--primary">↺</view>
         <view class="entry-item__body">
