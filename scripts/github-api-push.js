@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * 通过 GitHub REST Contents API 推送本地文件到远程仓库。
  *
@@ -15,6 +14,7 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const crypto = require('crypto');
 
 const [, , OWNER, REPO, TOKEN, BRANCH = 'main'] = process.argv;
 
@@ -30,7 +30,7 @@ const API_HOST = 'api.github.com';
 const SKIP_DIRS = new Set(['.git', '.tmp', 'node_modules', '.playwright-cli', '.workbuddy']);
 const SKIP_FILES = new Set(['config.json', '.env', 'project.private.config.json']);
 
-function apiRequest(method, apiPath, body) {
+function apiRequestOnce(method, apiPath, body) {
   return new Promise((resolve, reject) => {
     const payload = body ? JSON.stringify(body) : null;
     const req = https.request(
@@ -63,6 +63,21 @@ function apiRequest(method, apiPath, body) {
   });
 }
 
+// 带重试的请求：网络抖动（ECONNRESET / ETIMEDOUT / socket hang up）自动重试
+async function apiRequest(method, apiPath, body, retries = 4) {
+  let lastErr = null;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      return await apiRequestOnce(method, apiPath, body);
+    } catch (err) {
+      lastErr = err;
+      const delay = 800 * Math.pow(2, attempt);
+      await new Promise((r) => setTimeout(r, delay));
+    }
+  }
+  throw lastErr;
+}
+
 // 递归收集待推送文件（相对路径，统一 / 分隔）
 function collectFiles(dir, base = '') {
   const out = [];
@@ -88,37 +103,69 @@ function isBinary(buf) {
   return false;
 }
 
-async function getExistingSha(apiPath) {
-  const res = await apiRequest('GET', apiPath);
-  if (res.status === 200 && res.body && res.body.sha) return res.body.sha;
-  return null;
+// 计算 git blob 的 sha1：sha1("blob <字节数>\0" + 内容)
+// 与 GitHub 返回的 blob sha 同一算法，可据此判断内容是否真的变了
+function gitBlobSha(buf) {
+  const header = Buffer.from(`blob ${buf.length}\0`, 'utf8');
+  return crypto.createHash('sha1').update(Buffer.concat([header, buf])).digest('hex');
+}
+
+// 拉取远程已有文件：路径 → blob sha（只比对 sha，不下载内容，省流量）
+async function fetchRemoteBlobs() {
+  const res = await apiRequest('GET', `/repos/${OWNER}/${REPO}/git/trees/${BRANCH}?recursive=1`);
+  if (res.status !== 200 || !res.body || !Array.isArray(res.body.tree)) return new Map();
+  const map = new Map();
+  res.body.tree.filter((n) => n.type === 'blob').forEach((n) => map.set(n.path, n.sha));
+  return map;
 }
 
 (async function main() {
-  const files = collectFiles(ROOT);
-  console.log(`共 ${files.length} 个文件待推送 -> ${OWNER}/${REPO}@${BRANCH}\n`);
+  const allFiles = collectFiles(ROOT);
+  const remoteBlobs = await fetchRemoteBlobs();
 
-  let ok = 0, fail = 0, skipped = 0;
+  // 只推「远程没有」或「内容不一样」的文件
+  const pending = [];
+  let unchanged = 0;
+  for (const rel of allFiles) {
+    const buf = fs.readFileSync(path.join(ROOT, rel));
+    const sha = gitBlobSha(buf);
+    if (remoteBlobs.get(rel) === sha) { unchanged++; continue; }
+    pending.push({ rel, buf, sha });
+  }
+
+  console.log(`本地 ${allFiles.length} 个文件，远程已有 ${remoteBlobs.size} 个，内容相同 ${unchanged} 个，待推送 ${pending.length} 个 -> ${OWNER}/${REPO}@${BRANCH}\n`);
+
+  if (!pending.length) {
+    console.log('远程已是最新，无需推送。');
+    return;
+  }
+
+  let ok = 0, fail = 0;
   const failures = [];
 
-  for (let i = 0; i < files.length; i++) {
-    const rel = files[i];
-    const abs = path.join(ROOT, rel);
-    const buf = fs.readFileSync(abs);
+  for (let i = 0; i < pending.length; i++) {
+    const { rel, buf } = pending[i];
     const contentB64 = buf.toString('base64');
     const apiPath = `/repos/${OWNER}/${REPO}/contents/${rel.split('/').map(encodeURIComponent).join('/')}`;
 
-    // 先查是否已存在，决定是否带 sha（更新）
-    let sha = await getExistingSha(apiPath);
-    // 已存在且内容相同则跳过（对比 blob 内容需要额外请求，这里简单按 sha 存在即更新）
     const body = {
       message: `chore: sync ${rel}`,
       content: contentB64,
       branch: BRANCH,
     };
-    if (sha) body.sha = sha;
+    // 已存在的文件必须带上原 sha，否则 API 拒绝更新
+    const oldSha = remoteBlobs.get(rel);
+    if (oldSha) body.sha = oldSha;
 
-    let res = await apiRequest('PUT', apiPath, body);
+    let res;
+    try {
+      res = await apiRequest('PUT', apiPath, body);
+    } catch (err) {
+      fail++;
+      failures.push(`${rel} -> 网络错误 ${err.code || err.message}`);
+      console.error(`✗ ${rel} -> 网络错误 ${err.code || err.message}`);
+      continue;
+    }
 
     // 首次推送时 branch 尚不存在，Contents API 允许不带 branch 创建默认分支
     if (res.status === 422 && i === 0) {
@@ -128,8 +175,8 @@ async function getExistingSha(apiPath) {
 
     if (res.status === 200 || res.status === 201) {
       ok++;
-      if ((i + 1) % 20 === 0 || i === files.length - 1) {
-        console.log(`进度 ${i + 1}/${files.length} (ok=${ok}, fail=${fail})`);
+      if ((i + 1) % 20 === 0 || i === pending.length - 1) {
+        console.log(`进度 ${i + 1}/${pending.length} (ok=${ok}, fail=${fail})`);
       }
     } else {
       fail++;
@@ -139,7 +186,7 @@ async function getExistingSha(apiPath) {
     }
   }
 
-  console.log(`\n完成: 成功 ${ok}, 失败 ${fail}, 跳过 ${skipped}`);
+  console.log(`\n完成: 成功 ${ok}, 失败 ${fail}`);
   if (failures.length) {
     console.log('\n失败清单:');
     failures.slice(0, 30).forEach((f) => console.log('  ' + f));
