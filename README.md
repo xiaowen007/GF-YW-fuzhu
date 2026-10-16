@@ -52,13 +52,16 @@ inventory-wxapp/
 - **照片管理**：正品与异常对照分开，多选上传自动压缩到长边 1280px
 
 启动方式：
+
 ```bash
 cd web && python -m http.server 8090
 # 浏览器打开 http://127.0.0.1:8090/admin.html
 ```
+
 详细说明见 `后台管理说明.md`。
 
 > 改动 `utils/` 后需重新打包，否则网页端搜索行为会停旧版本：
+>
 > ```bash
 > node scripts/build-web-bundle.js
 > ```
