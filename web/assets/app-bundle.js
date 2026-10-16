@@ -1220,17 +1220,25 @@ function upsertMaterials(items, options = {}) {
 
   items.forEach(item => {
     const idx = list.findIndex(m => m.code === item.code);
-    const carryPhotos = item.hasPhotos
-      ? { photos: (item.photos || []).slice(0, 9), fakePhotos: (item.fakePhotos || []).slice(0, 9) }
-      : {};
+    // 照片合并策略：只有当本次导入「确实带照片内容」时才覆盖，否则沿用库里已有的。
+    // 空数组也是 truthy，`[] || 旧值` 拿不到兜底，必须显式判长度 ——
+    // 否则手机侧没照片的物料同步到网页，会把网页上已上传的照片冲掉。
+    const incomingPhotos = Array.isArray(item.photos) ? item.photos.slice(0, 9) : null;
+    const incomingFakes = Array.isArray(item.fakePhotos) ? item.fakePhotos.slice(0, 9) : null;
+    const usePhotos = !!item.hasPhotos && incomingPhotos !== null && incomingPhotos.length > 0;
+    const useFakes = !!item.hasPhotos && incomingFakes !== null && incomingFakes.length > 0;
+    const carryPhotos = {
+      photos: usePhotos ? incomingPhotos : undefined,
+      fakePhotos: useFakes ? incomingFakes : undefined
+    };
     if (idx >= 0) {
       if (appendOnly) { skipped++; return; }
       list[idx] = {
         ...list[idx],
         ...item,
         id: list[idx].id,
-        photos: carryPhotos.photos || list[idx].photos || [],
-        fakePhotos: carryPhotos.fakePhotos || list[idx].fakePhotos || [],
+        photos: carryPhotos.photos !== undefined ? carryPhotos.photos : (list[idx].photos || []),
+        fakePhotos: carryPhotos.fakePhotos !== undefined ? carryPhotos.fakePhotos : (list[idx].fakePhotos || []),
         updatedAt: getNow()
       };
       applyIndex(list[idx]);
@@ -1304,6 +1312,52 @@ function compressImage(filePath) {
   });
 }
 
+/**
+ * 导出物料备份
+ *
+ * 输出与网页后台「导出 JSON」完全一致的格式：纯物料对象数组，
+ * 两端可互相导入（导出 → 导入自成闭环）。
+ *
+ * 剥离派生字段：searchText / searchIndex 是搜索索引，导入时会重建，不入库文件。
+ * hasPhotos 只在「确实带照片」时才打标记 —— 若一条物料没有照片也打标记，
+ * 导入的空数组会覆盖掉库里已有的照片（空数组是 truthy，`[] || 旧值` 不会兜底）。
+ *
+ * @param {Object} options
+ * @param {boolean} options.includePhotos 是否携带照片，默认 true。
+ *        关掉后体积大幅缩小，适合走剪贴板快速同步到网页后台。
+ * @returns {Array} 可直接 JSON.stringify 的物料数组
+ */
+function exportMaterials(options = {}) {
+  const { includePhotos = true } = options;
+  return getMaterials().map(m => {
+    const copy = {};
+    Object.keys(m).forEach(k => {
+      if (k === 'searchText' || k === 'searchIndex') return;
+      copy[k] = m[k];
+    });
+
+    if (includePhotos) {
+      const hasPhoto = (Array.isArray(m.photos) && m.photos.length > 0)
+        || (Array.isArray(m.fakePhotos) && m.fakePhotos.length > 0);
+      if (hasPhoto) {
+        copy.photos = Array.isArray(m.photos) ? m.photos : [];
+        copy.fakePhotos = Array.isArray(m.fakePhotos) ? m.fakePhotos : [];
+        copy.hasPhotos = true;
+      } else {
+        // 明确不带标记：导入时沿用目标库已有照片，绝不覆盖
+        delete copy.hasPhotos;
+        copy.photos = [];
+        copy.fakePhotos = [];
+      }
+    } else {
+      delete copy.hasPhotos;
+      delete copy.photos;
+      delete copy.fakePhotos;
+    }
+    return copy;
+  });
+}
+
 module.exports = {
   MATERIALS_KEY,
   FAVORITES_KEY,
@@ -1341,6 +1395,7 @@ module.exports = {
   clearSearchHistory,
   parseImport,
   upsertMaterials,
+  exportMaterials,
   compressImage
 };
 
