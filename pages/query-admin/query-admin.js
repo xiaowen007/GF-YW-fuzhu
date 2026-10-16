@@ -146,6 +146,84 @@ Page({
     wx.navigateTo({ url: '/pages/query-import/query-import' });
   },
 
+  /**
+   * 导出物料备份
+   *
+   * 小程序不能像网页那样直接下载文件，给出两条出路：
+   *   1. 分享文件 —— 完整备份（含照片），发到微信会话后在电脑端接收，
+   *      再拿到网页后台「导入」上传，适合做全量备份与跨端迁移。
+   *   2. 复制文本 —— 不含照片，体积只有几十 KB，粘贴到网页后台导入框即可，
+   *      适合日常快速把手机上的改动同步到网页。
+   */
+  exportMaterials() {
+    const full = materials.exportMaterials({ includePhotos: true });
+    const light = materials.exportMaterials({ includePhotos: false });
+    const lightText = JSON.stringify(light, null, 2);
+    const photoCount = full.reduce((n, m) => n + ((m.photos || []).length + (m.fakePhotos || []).length), 0);
+    const lightKB = Math.max(1, Math.round(lightText.length / 1024));
+
+    wx.showActionSheet({
+      itemList: [
+        `分享备份文件（${full.length} 条 · 含 ${photoCount} 张照片）`,
+        `复制为文本同步到网页（${full.length} 条 · 约 ${lightKB}KB）`
+      ],
+      success: (res) => {
+        if (res.tapIndex === 0) this.shareBackupFile(full);
+        if (res.tapIndex === 1) this.copyBackupText(lightText, full.length);
+      },
+      fail: () => {}
+    });
+  },
+
+  shareBackupFile(list) {
+    const fs = wx.getFileSystemManager();
+    const filePath = `${wx.env.USER_DATA_PATH}/materials_backup_${Date.now()}.json`;
+    wx.showLoading({ title: '正在生成备份' });
+    fs.writeFile({
+      filePath,
+      data: JSON.stringify(list, null, 2),
+      encoding: 'utf8',
+      success: () => {
+        wx.hideLoading();
+        // shareFileMessage 需要基础库 2.16.1+，发到「文件传输助手」后在电脑端即可取用
+        wx.shareFileMessage({
+          filePath,
+          fileName: `物料备份_${list.length}条.json`,
+          success: () => wx.showToast({ title: '已分享，请在电脑端接收', icon: 'success' }),
+          fail: () => {
+            // 不支持文件分享时降级为预览，用户可从预览里另存
+            wx.openDocument({
+              filePath,
+              fileType: 'json',
+              success: () => wx.showToast({ title: '已生成备份文件', icon: 'success' }),
+              fail: () => wx.showToast({ title: '导出失败', icon: 'none' })
+            });
+          }
+        });
+      },
+      fail: () => {
+        wx.hideLoading();
+        wx.showToast({ title: '写入文件失败', icon: 'none' });
+      }
+    });
+  },
+
+  copyBackupText(text, count) {
+    // 照片是 base64，含照片的备份动辄几 MB，剪贴板扛不住，因此文本版一律不带照片
+    wx.setClipboardData({
+      data: text,
+      success: () => {
+        wx.showModal({
+          title: '已复制物料数据',
+          content: `共 ${count} 条（不含照片）。发给「文件传输助手」后在电脑打开网页后台，粘贴进导入框即可。\n\n照片需在网页端重新上传，或用「分享备份文件」做完整备份。`,
+          showCancel: false,
+          confirmText: '知道了'
+        });
+      },
+      fail: () => wx.showToast({ title: '复制失败', icon: 'none' })
+    });
+  },
+
   createMaterial() {
     if (!roles.canWrite()) {
       wx.showToast({ title: '需要维护员权限', icon: 'none' });
